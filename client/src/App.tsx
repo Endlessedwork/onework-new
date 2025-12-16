@@ -11,6 +11,10 @@ import Collections from "@/pages/collections";
 import FAQ from "@/pages/faq";
 import Contact from "@/pages/contact";
 import Customers from "@/pages/customers";
+import AdminLogin from "@/pages/admin/login";
+import AdminDashboard from "@/pages/admin/dashboard";
+import AdminProducts from "@/pages/admin/products";
+import AdminSettings from "@/pages/admin/settings";
 
 function Router() {
   return (
@@ -21,6 +25,13 @@ function Router() {
       <Route path="/faq" component={FAQ} />
       <Route path="/contact" component={Contact} />
       <Route path="/customers" component={Customers} />
+      
+      {/* Admin routes */}
+      <Route path="/admin/login" component={AdminLogin} />
+      <Route path="/admin/dashboard" component={AdminDashboard} />
+      <Route path="/admin/products" component={AdminProducts} />
+      <Route path="/admin/settings" component={AdminSettings} />
+      
       <Route component={NotFound} />
     </Switch>
   );
