@@ -1,30 +1,33 @@
 import { motion } from "framer-motion";
 import { Building2, Hospital, Package } from "lucide-react";
-
-const services = [
-  {
-    icon: Building2,
-    title: "Hotel Amenities",
-    description: "Complete amenity solutions for luxury hotels and resorts, customized to your brand identity.",
-  },
-  {
-    icon: Hospital,
-    title: "Hospital Supplies",
-    description: "Hygienic and comforting care packages designed specifically for healthcare environments.",
-  },
-  {
-    icon: Package,
-    title: "OEM Manufacturing",
-    description: "Full-service OEM production with flexible minimums and premium quality control.",
-  },
-];
+import { useLanguage } from "@/lib/i18n";
 
 export function Services() {
+  const { t } = useLanguage();
+
+  const services = [
+    {
+      icon: Building2,
+      title: t('serv.hotel'),
+      description: t('serv.hotel.desc'),
+    },
+    {
+      icon: Hospital,
+      title: t('serv.hospital'),
+      description: t('serv.hospital.desc'),
+    },
+    {
+      icon: Package,
+      title: t('serv.oem'),
+      description: t('serv.oem.desc'),
+    },
+  ];
+
   return (
     <section id="services" className="py-24 bg-white relative overflow-hidden">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
-          <h2 className="text-4xl font-serif font-bold text-primary mb-4">Our Services</h2>
+          <h2 className="text-4xl font-serif font-bold text-primary mb-4">{t('serv.title')}</h2>
           <div className="w-20 h-1 bg-accent mx-auto rounded-full" />
         </div>
 

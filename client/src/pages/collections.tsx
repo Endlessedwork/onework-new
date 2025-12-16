@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { useLanguage } from "@/lib/i18n";
 
 // Re-using images or placeholders for now. In a real app, these would be distinct.
 import imgSea from "@assets/generated_images/blue_ocean_themed_toiletries.png";
@@ -71,6 +72,8 @@ const products = [
 ];
 
 export default function Collections() {
+  const { t } = useLanguage();
+
   return (
     <div className="min-h-screen bg-background text-foreground font-sans">
       <Navbar />
@@ -79,10 +82,10 @@ export default function Collections() {
         <section className="bg-primary/5 py-20">
           <div className="container mx-auto px-4 text-center">
             <h1 className="text-4xl md:text-6xl font-serif font-bold text-primary mb-6">
-              Our Collections
+              {t('col.page.title')}
             </h1>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Explore our wide range of premium hotel amenities, categorized by theme and mood.
+              {t('col.page.desc')}
             </p>
           </div>
         </section>
@@ -91,7 +94,7 @@ export default function Collections() {
         <section className="py-20 container mx-auto px-4">
            {/* Filters (Mockup) */}
            <div className="flex flex-wrap justify-center gap-4 mb-16">
-             {["All", "Sea Breeze", "Flower Blossom", "Lavender Dreams", "Pure Natural"].map((filter, i) => (
+             {[t('col.filter.all'), "Sea Breeze", "Flower Blossom", "Lavender Dreams", "Pure Natural"].map((filter, i) => (
                <Button 
                 key={i} 
                 variant={i === 0 ? "default" : "outline"}

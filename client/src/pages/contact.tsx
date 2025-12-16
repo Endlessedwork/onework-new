@@ -6,8 +6,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import imgOffice from "@assets/generated_images/modern_office_building_exterior.png";
+import { useLanguage } from "@/lib/i18n";
 
 export default function Contact() {
+  const { t } = useLanguage();
+
   return (
     <div className="min-h-screen bg-background text-foreground font-sans">
       <Navbar />
@@ -15,10 +18,10 @@ export default function Contact() {
         <section className="bg-primary text-white py-20">
           <div className="container mx-auto px-4 text-center">
             <h1 className="text-4xl md:text-6xl font-serif font-bold mb-6">
-              Get in Touch
+              {t('contact.title')}
             </h1>
             <p className="text-lg text-white/80 max-w-2xl mx-auto">
-              We'd love to hear from you. Whether you have a question about our collections, pricing, or custom projects, our team is ready to help.
+              {t('contact.desc')}
             </p>
           </div>
         </section>
@@ -32,14 +35,14 @@ export default function Contact() {
               className="space-y-10"
             >
               <div>
-                <h2 className="text-3xl font-serif font-bold text-primary mb-6">Contact Information</h2>
+                <h2 className="text-3xl font-serif font-bold text-primary mb-6">{t('contact.info')}</h2>
                 <div className="space-y-6">
                   <div className="flex items-start gap-4">
                     <div className="w-12 h-12 rounded-full bg-secondary flex items-center justify-center shrink-0 text-primary">
                       <MapPin className="w-6 h-6" />
                     </div>
                     <div>
-                      <h3 className="font-semibold text-lg mb-1">Head Office</h3>
+                      <h3 className="font-semibold text-lg mb-1">{t('contact.head')}</h3>
                       <p className="text-muted-foreground leading-relaxed">
                         123 Sukhumvit Road, Watthana,<br />
                         Bangkok 10110, Thailand
@@ -52,7 +55,7 @@ export default function Contact() {
                       <Phone className="w-6 h-6" />
                     </div>
                     <div>
-                      <h3 className="font-semibold text-lg mb-1">Phone</h3>
+                      <h3 className="font-semibold text-lg mb-1">{t('contact.phone')}</h3>
                       <p className="text-muted-foreground">
                         +66 2 123 4567<br />
                         +66 81 987 6543
@@ -65,7 +68,7 @@ export default function Contact() {
                       <Mail className="w-6 h-6" />
                     </div>
                     <div>
-                      <h3 className="font-semibold text-lg mb-1">Email</h3>
+                      <h3 className="font-semibold text-lg mb-1">{t('contact.email')}</h3>
                       <p className="text-muted-foreground">
                         hello@onework.co.th<br />
                         sales@onework.co.th
@@ -78,10 +81,10 @@ export default function Contact() {
                       <Clock className="w-6 h-6" />
                     </div>
                     <div>
-                      <h3 className="font-semibold text-lg mb-1">Business Hours</h3>
+                      <h3 className="font-semibold text-lg mb-1">{t('contact.hours')}</h3>
                       <p className="text-muted-foreground">
-                        Monday - Friday: 9:00 AM - 6:00 PM<br />
-                        Saturday - Sunday: Closed
+                        {t('contact.hours.desc')}<br />
+                        {t('contact.hours.closed')}
                       </p>
                     </div>
                   </div>
@@ -99,38 +102,38 @@ export default function Contact() {
               animate={{ opacity: 1, x: 0 }}
               className="bg-white p-8 md:p-10 rounded-3xl shadow-xl border border-gray-100"
             >
-              <h2 className="text-3xl font-serif font-bold text-primary mb-2">Send us a Message</h2>
-              <p className="text-muted-foreground mb-8">Fill out the form below and we'll get back to you shortly.</p>
+              <h2 className="text-3xl font-serif font-bold text-primary mb-2">{t('contact.form.title')}</h2>
+              <p className="text-muted-foreground mb-8">{t('contact.form.desc')}</p>
               
               <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2">
-                    <label className="text-sm font-medium text-foreground/80">First Name</label>
+                    <label className="text-sm font-medium text-foreground/80">{t('contact.form.fname')}</label>
                     <Input placeholder="John" />
                   </div>
                   <div className="space-y-2">
-                    <label className="text-sm font-medium text-foreground/80">Last Name</label>
+                    <label className="text-sm font-medium text-foreground/80">{t('contact.form.lname')}</label>
                     <Input placeholder="Doe" />
                   </div>
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-foreground/80">Email Address</label>
+                  <label className="text-sm font-medium text-foreground/80">{t('contact.form.email')}</label>
                   <Input type="email" placeholder="john@company.com" />
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-foreground/80">Subject</label>
+                  <label className="text-sm font-medium text-foreground/80">{t('contact.form.subject')}</label>
                   <Input placeholder="Product Inquiry" />
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-foreground/80">Message</label>
+                  <label className="text-sm font-medium text-foreground/80">{t('contact.form.message')}</label>
                   <Textarea placeholder="Tell us about your requirements..." className="min-h-[150px]" />
                 </div>
 
                 <Button className="w-full rounded-full h-12 text-lg" size="lg">
-                  Send Message
+                  {t('contact.form.send')}
                 </Button>
               </form>
             </motion.div>

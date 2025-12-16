@@ -1,6 +1,7 @@
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { motion } from "framer-motion";
+import { useLanguage } from "@/lib/i18n";
 
 // Using the same customer list for now
 const customers = [
@@ -23,6 +24,8 @@ const customers = [
 ];
 
 export default function Customers() {
+  const { t } = useLanguage();
+
   return (
     <div className="min-h-screen bg-background text-foreground font-sans">
       <Navbar />
@@ -30,10 +33,10 @@ export default function Customers() {
         <section className="bg-secondary/30 py-20">
           <div className="container mx-auto px-4 text-center">
             <h1 className="text-4xl md:text-6xl font-serif font-bold text-primary mb-6">
-              Our Valued Customers
+              {t('cust.title')}
             </h1>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              We are proud to serve some of the most prestigious names in the hospitality industry.
+              {t('cust.desc')}
             </p>
           </div>
         </section>

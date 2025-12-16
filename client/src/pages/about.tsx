@@ -4,8 +4,11 @@ import { motion } from "framer-motion";
 import { CheckCircle2 } from "lucide-react";
 import imgFactory from "@assets/generated_images/modern_clean_factory_production_line.png";
 import imgTeam from "@assets/generated_images/professional_team_meeting.png";
+import { useLanguage } from "@/lib/i18n";
 
 export default function About() {
+  const { t } = useLanguage();
+
   return (
     <div className="min-h-screen bg-background text-foreground font-sans">
       <Navbar />
@@ -18,10 +21,10 @@ export default function About() {
               animate={{ opacity: 1, y: 0 }}
               className="text-4xl md:text-6xl font-serif font-bold text-primary mb-6"
             >
-              Our Story
+              {t('about.title')}
             </motion.h1>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Dedicated to elevating the hospitality experience through exceptional quality and sustainable design since 2010.
+              {t('about.desc')}
             </p>
           </div>
         </section>
@@ -46,12 +49,12 @@ export default function About() {
               viewport={{ once: true }}
               className="space-y-6"
             >
-              <h2 className="text-3xl font-serif font-bold text-primary">Vision & Mission</h2>
+              <h2 className="text-3xl font-serif font-bold text-primary">{t('about.vision')}</h2>
               <p className="text-muted-foreground leading-relaxed">
-                At Onework, we believe that every detail counts. Our mission is to provide hotels and resorts with amenities that not only meet the highest standards of hygiene and quality but also create memorable experiences for guests.
+                {t('about.vision.desc1')}
               </p>
               <p className="text-muted-foreground leading-relaxed">
-                We are committed to sustainability, innovation, and design excellence. We work closely with our partners to create bespoke solutions that reflect their unique brand identity.
+                {t('about.vision.desc2')}
               </p>
             </motion.div>
           </div>
@@ -79,16 +82,16 @@ export default function About() {
                 viewport={{ once: true }}
                 className="space-y-6"
               >
-                <h2 className="text-3xl font-serif font-bold text-primary">Manufacturing Excellence</h2>
+                <h2 className="text-3xl font-serif font-bold text-primary">{t('about.manufacture')}</h2>
                 <p className="text-muted-foreground leading-relaxed mb-6">
-                  Our state-of-the-art manufacturing facilities adhere to strict GMP (Good Manufacturing Practice) standards. We control every step of the process to ensure consistency and safety.
+                  {t('about.manufacture.desc')}
                 </p>
                 <ul className="space-y-4">
                   {[
-                    "GMP Certified Facilities",
-                    "Eco-friendly Production Processes",
-                    "Strict Quality Control (QC)",
-                    "Sustainable Material Sourcing"
+                    t('about.list.1'),
+                    t('about.list.2'),
+                    t('about.list.3'),
+                    t('about.list.4')
                   ].map((item, i) => (
                     <li key={i} className="flex items-center gap-3 text-foreground/80">
                       <CheckCircle2 className="w-5 h-5 text-primary" />
