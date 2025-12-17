@@ -5,6 +5,7 @@ import { requireAuth, hashPassword } from "./auth";
 import passport from "passport";
 import { insertProductSchema, insertSettingSchema, insertUserSchema } from "@shared/schema";
 import { fromZodError } from "zod-validation-error";
+import { ObjectStorageService, ObjectNotFoundError } from "./objectStorage";
 
 export async function registerRoutes(
   httpServer: Server,
@@ -193,6 +194,34 @@ export async function registerRoutes(
       res.send(setting);
     } catch (error: any) {
       res.status(500).send({ error: error.message });
+    }
+  });
+
+  // Object Storage routes for image upload
+  // Reference: blueprint:javascript_object_storage
+  app.post("/api/admin/upload", requireAuth, async (_req, res) => {
+    try {
+      const objectStorageService = new ObjectStorageService();
+      const uploadURL = await objectStorageService.getObjectEntityUploadURL();
+      res.json({ uploadURL });
+    } catch (error: any) {
+      console.error("Upload URL error:", error);
+      res.status(500).send({ error: error.message });
+    }
+  });
+
+  // Serve uploaded objects
+  app.get("/objects/:objectPath(*)", async (req, res) => {
+    const objectStorageService = new ObjectStorageService();
+    try {
+      const objectFile = await objectStorageService.getObjectEntityFile(req.path);
+      objectStorageService.downloadObject(objectFile, res);
+    } catch (error) {
+      console.error("Error serving object:", error);
+      if (error instanceof ObjectNotFoundError) {
+        return res.sendStatus(404);
+      }
+      return res.sendStatus(500);
     }
   });
 
