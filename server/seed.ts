@@ -1,13 +1,13 @@
 import { db } from "./db";
 import { users, products, settings } from "@shared/schema";
-import bcrypt from "bcrypt";
+import { hashPassword } from "./auth";
 
 async function seed() {
   console.log("🌱 Starting database seed...");
 
   // 1. Create admin user
   console.log("Creating admin user...");
-  const hashedPassword = await bcrypt.hash("admin123", 10);
+  const hashedPassword = await hashPassword("admin123");
   
   const existingUsers = await db.select().from(users);
   if (existingUsers.length === 0) {
