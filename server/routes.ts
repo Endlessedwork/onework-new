@@ -3,7 +3,7 @@ import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { requireAuth, hashPassword } from "./auth";
 import passport from "passport";
-import { insertProductSchema, insertSettingSchema, insertUserSchema } from "@shared/schema";
+import { insertProductSchema, insertSettingSchema, insertUserSchema, insertCategorySchema } from "@shared/schema";
 import { fromZodError } from "zod-validation-error";
 import { ObjectStorageService, ObjectNotFoundError } from "./objectStorage";
 
@@ -192,6 +192,91 @@ export async function registerRoutes(
       );
       
       res.send(setting);
+    } catch (error: any) {
+      res.status(500).send({ error: error.message });
+    }
+  });
+
+  // Public categories route (for frontend display)
+  app.get("/api/categories", async (_req, res) => {
+    try {
+      const categories = await storage.getActiveCategories();
+      res.send(categories);
+    } catch (error: any) {
+      res.status(500).send({ error: error.message });
+    }
+  });
+
+  // Admin categories routes
+  app.get("/api/admin/categories", requireAuth, async (_req, res) => {
+    try {
+      const categories = await storage.getAllCategories();
+      res.send(categories);
+    } catch (error: any) {
+      res.status(500).send({ error: error.message });
+    }
+  });
+
+  app.get("/api/admin/categories/:id", requireAuth, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const category = await storage.getCategory(id);
+      
+      if (!category) {
+        return res.status(404).send({ error: "Category not found" });
+      }
+      
+      res.send(category);
+    } catch (error: any) {
+      res.status(500).send({ error: error.message });
+    }
+  });
+
+  app.post("/api/admin/categories", requireAuth, async (req, res) => {
+    try {
+      const result = insertCategorySchema.safeParse(req.body);
+      if (!result.success) {
+        return res.status(400).send({ error: fromZodError(result.error).message });
+      }
+
+      const category = await storage.createCategory(result.data);
+      res.send(category);
+    } catch (error: any) {
+      res.status(500).send({ error: error.message });
+    }
+  });
+
+  app.patch("/api/admin/categories/:id", requireAuth, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const result = insertCategorySchema.partial().safeParse(req.body);
+      
+      if (!result.success) {
+        return res.status(400).send({ error: fromZodError(result.error).message });
+      }
+
+      const category = await storage.updateCategory(id, result.data);
+      
+      if (!category) {
+        return res.status(404).send({ error: "Category not found" });
+      }
+      
+      res.send(category);
+    } catch (error: any) {
+      res.status(500).send({ error: error.message });
+    }
+  });
+
+  app.delete("/api/admin/categories/:id", requireAuth, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const success = await storage.deleteCategory(id);
+      
+      if (!success) {
+        return res.status(404).send({ error: "Category not found" });
+      }
+      
+      res.send({ success: true });
     } catch (error: any) {
       res.status(500).send({ error: error.message });
     }
