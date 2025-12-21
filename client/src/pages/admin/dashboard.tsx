@@ -60,7 +60,7 @@ export default function AdminDashboard() {
       <header className="border-b bg-white">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-8">
-            <h1 className="text-2xl font-serif font-bold text-primary">
+            <h1 className="text-2xl font-heading font-bold text-primary">
               onework<span className="text-accent">.</span> Admin
             </h1>
             <nav className="hidden md:flex items-center gap-6">
@@ -101,7 +101,7 @@ export default function AdminDashboard() {
       {/* Main Content */}
       <main className="container mx-auto px-4 py-12">
         <div className="mb-8">
-          <h2 className="text-3xl font-serif font-bold text-primary mb-2">
+          <h2 className="text-3xl font-heading font-bold text-primary mb-2">
             Dashboard
           </h2>
           <p className="text-muted-foreground">

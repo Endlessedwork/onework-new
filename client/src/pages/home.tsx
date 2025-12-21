@@ -20,7 +20,7 @@ export default function Home() {
         <Services />
         <section className="py-24 bg-accent/20">
           <div className="container mx-auto px-4 text-center">
-             <h2 className="text-4xl font-serif font-bold text-primary mb-6">{t('cta.title')}</h2>
+             <h2 className="text-4xl font-bold text-primary mb-6">{t('cta.title')}</h2>
              <p className="text-muted-foreground mb-8 max-w-2xl mx-auto">
                {t('cta.desc')}
              </p>

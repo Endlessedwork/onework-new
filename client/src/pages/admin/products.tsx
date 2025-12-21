@@ -197,7 +197,7 @@ export default function AdminProducts() {
                 Dashboard
               </Button>
             </Link>
-            <h1 className="text-xl font-serif font-bold text-primary">Product Management</h1>
+            <h1 className="text-xl font-heading font-bold text-primary">Product Management</h1>
           </div>
           <Button variant="ghost" size="sm" onClick={handleLogout}>
             <LogOut className="w-4 h-4 mr-2" />

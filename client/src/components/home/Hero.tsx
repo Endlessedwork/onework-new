@@ -32,7 +32,7 @@ export function Hero() {
           <span className="inline-block py-1 px-3 rounded-full bg-white/30 backdrop-blur-sm border border-white/40 text-white text-xs font-semibold tracking-wider uppercase mb-6">
             {t('hero.badge')}
           </span>
-          <h1 className="text-5xl md:text-7xl lg:text-8xl font-serif font-bold text-white mb-6 drop-shadow-sm leading-tight whitespace-pre-line">
+          <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold text-white mb-6 drop-shadow-sm leading-tight whitespace-pre-line">
             {t('hero.title')}
           </h1>
           <p className="text-lg md:text-xl text-white/90 max-w-2xl mx-auto mb-10 font-light leading-relaxed">

@@ -32,7 +32,7 @@ export default function Customers() {
       <main className="pt-24">
         <section className="bg-secondary/30 py-20">
           <div className="container mx-auto px-4 text-center">
-            <h1 className="text-4xl md:text-6xl font-serif font-bold text-primary mb-6">
+            <h1 className="text-4xl md:text-6xl font-heading font-bold text-primary mb-6">
               {t('cust.title')}
             </h1>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
@@ -52,7 +52,7 @@ export default function Customers() {
                 transition={{ delay: index * 0.05 }}
                 className="flex items-center justify-center h-32 bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow group"
               >
-                <h3 className="text-xl font-serif font-bold text-gray-400 group-hover:text-primary transition-colors text-center">
+                <h3 className="text-xl font-heading font-bold text-gray-400 group-hover:text-primary transition-colors text-center">
                   {customer}
                 </h3>
               </motion.div>

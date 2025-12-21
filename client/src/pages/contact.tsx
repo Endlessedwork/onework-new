@@ -17,7 +17,7 @@ export default function Contact() {
       <main className="pt-24">
         <section className="bg-primary text-white py-20">
           <div className="container mx-auto px-4 text-center">
-            <h1 className="text-4xl md:text-6xl font-serif font-bold mb-6">
+            <h1 className="text-4xl md:text-6xl font-heading font-bold mb-6">
               {t('contact.title')}
             </h1>
             <p className="text-lg text-white/80 max-w-2xl mx-auto">
@@ -35,7 +35,7 @@ export default function Contact() {
               className="space-y-10"
             >
               <div>
-                <h2 className="text-3xl font-serif font-bold text-primary mb-6">{t('contact.info')}</h2>
+                <h2 className="text-3xl font-heading font-bold text-primary mb-6">{t('contact.info')}</h2>
                 <div className="space-y-6">
                   <div className="flex items-start gap-4">
                     <div className="w-12 h-12 rounded-full bg-secondary flex items-center justify-center shrink-0 text-primary">
@@ -102,7 +102,7 @@ export default function Contact() {
               animate={{ opacity: 1, x: 0 }}
               className="bg-white p-8 md:p-10 rounded-3xl shadow-xl border border-gray-100"
             >
-              <h2 className="text-3xl font-serif font-bold text-primary mb-2">{t('contact.form.title')}</h2>
+              <h2 className="text-3xl font-heading font-bold text-primary mb-2">{t('contact.form.title')}</h2>
               <p className="text-muted-foreground mb-8">{t('contact.form.desc')}</p>
               
               <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>

@@ -60,7 +60,7 @@ export default function Collections() {
         {/* Header */}
         <section className="bg-primary/5 py-20">
           <div className="container mx-auto px-4 text-center">
-            <h1 className="text-4xl md:text-6xl font-serif font-bold text-primary mb-6">
+            <h1 className="text-4xl md:text-6xl font-heading font-bold text-primary mb-6">
               {t('col.page.title')}
             </h1>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
@@ -136,7 +136,7 @@ export default function Collections() {
                          <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-2">
                            {collectionName}
                          </p>
-                         <h3 className="text-lg font-serif font-semibold text-foreground mb-2 group-hover:text-primary transition-colors">
+                         <h3 className="text-lg font-heading font-semibold text-foreground mb-2 group-hover:text-primary transition-colors">
                            {productName}
                          </h3>
                          {productDesc && (

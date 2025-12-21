@@ -47,7 +47,7 @@ export function Navbar() {
         {/* Logo */}
         <Link href="/">
           <a className={cn(
-            "text-2xl font-serif font-bold tracking-tight transition-colors",
+            "text-2xl font-heading font-bold tracking-tight transition-colors",
              isScrolled || !isHome ? "text-primary" : "text-primary md:text-white"
           )}>
             onework<span className="text-accent">.</span>

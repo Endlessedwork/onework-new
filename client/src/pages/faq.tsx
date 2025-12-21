@@ -38,7 +38,7 @@ export default function FAQ() {
       <main className="pt-24">
         <section className="bg-secondary/30 py-20">
           <div className="container mx-auto px-4 text-center">
-            <h1 className="text-4xl md:text-6xl font-serif font-bold text-primary mb-6">
+            <h1 className="text-4xl md:text-6xl font-heading font-bold text-primary mb-6">
               {t('faq.title')}
             </h1>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">

@@ -19,7 +19,7 @@ export default function About() {
             <motion.h1 
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="text-4xl md:text-6xl font-serif font-bold text-primary mb-6"
+              className="text-4xl md:text-6xl font-heading font-bold text-primary mb-6"
             >
               {t('about.title')}
             </motion.h1>
@@ -49,7 +49,7 @@ export default function About() {
               viewport={{ once: true }}
               className="space-y-6"
             >
-              <h2 className="text-3xl font-serif font-bold text-primary">{t('about.vision')}</h2>
+              <h2 className="text-3xl font-heading font-bold text-primary">{t('about.vision')}</h2>
               <p className="text-muted-foreground leading-relaxed">
                 {t('about.vision.desc1')}
               </p>
@@ -82,7 +82,7 @@ export default function About() {
                 viewport={{ once: true }}
                 className="space-y-6"
               >
-                <h2 className="text-3xl font-serif font-bold text-primary">{t('about.manufacture')}</h2>
+                <h2 className="text-3xl font-heading font-bold text-primary">{t('about.manufacture')}</h2>
                 <p className="text-muted-foreground leading-relaxed mb-6">
                   {t('about.manufacture.desc')}
                 </p>

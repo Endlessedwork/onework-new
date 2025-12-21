@@ -213,7 +213,7 @@ export default function AdminSettings() {
                 Dashboard
               </Button>
             </Link>
-            <h1 className="text-xl font-serif font-bold text-primary">Website Settings</h1>
+            <h1 className="text-xl font-heading font-bold text-primary">Website Settings</h1>
           </div>
           <div className="flex items-center gap-2">
             <Button

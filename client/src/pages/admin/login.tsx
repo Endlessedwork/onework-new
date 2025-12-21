@@ -43,7 +43,7 @@ export default function AdminLogin() {
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary/10 via-background to-accent/10">
       <Card className="w-full max-w-md mx-4">
         <CardHeader className="text-center">
-          <div className="text-3xl font-serif font-bold text-primary mb-2">
+          <div className="text-3xl font-heading font-bold text-primary mb-2">
             onework<span className="text-accent">.</span>
           </div>
           <CardTitle className="text-2xl">Admin Login</CardTitle>

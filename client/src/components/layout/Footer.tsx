@@ -10,7 +10,7 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
           <div className="space-y-6">
             <Link href="/">
-              <a className="text-3xl font-serif font-bold tracking-tight text-white">
+              <a className="text-3xl font-heading font-bold tracking-tight text-white">
                 onework<span className="text-accent">.</span>
               </a>
             </Link>
@@ -20,7 +20,7 @@ export function Footer() {
           </div>
 
           <div>
-            <h4 className="text-lg font-serif font-semibold mb-6 text-accent">Collections</h4>
+            <h4 className="text-lg font-heading font-semibold mb-6 text-accent">Collections</h4>
             <ul className="space-y-4">
               <li><Link href="/collections"><a className="text-white/70 hover:text-white transition-colors">Sea Breeze</a></Link></li>
               <li><Link href="/collections"><a className="text-white/70 hover:text-white transition-colors">Flower Blossom</a></Link></li>
@@ -30,7 +30,7 @@ export function Footer() {
           </div>
 
           <div>
-            <h4 className="text-lg font-serif font-semibold mb-6 text-accent">{t('footer.company')}</h4>
+            <h4 className="text-lg font-heading font-semibold mb-6 text-accent">{t('footer.company')}</h4>
             <ul className="space-y-4">
               <li><Link href="/about"><a className="text-white/70 hover:text-white transition-colors">{t('nav.about')}</a></Link></li>
               <li><Link href="/"><a className="text-white/70 hover:text-white transition-colors">{t('nav.home')}</a></Link></li>
@@ -40,7 +40,7 @@ export function Footer() {
           </div>
 
           <div>
-            <h4 className="text-lg font-serif font-semibold mb-6 text-accent">{t('nav.contact')}</h4>
+            <h4 className="text-lg font-heading font-semibold mb-6 text-accent">{t('nav.contact')}</h4>
             <address className="not-italic text-white/70 space-y-4">
               <p>123 Sukhumvit Road,<br />Bangkok, Thailand 10110</p>
               <p>+66 2 123 4567</p>

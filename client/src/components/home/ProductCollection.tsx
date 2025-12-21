@@ -48,7 +48,7 @@ export function ProductCollection() {
         <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
           <div>
             <span className="text-accent-foreground font-medium tracking-wide uppercase text-sm">{t('col.curated')}</span>
-            <h2 className="text-4xl md:text-5xl font-serif font-bold text-primary mt-2">{t('col.title')}</h2>
+            <h2 className="text-4xl md:text-5xl font-bold text-primary mt-2">{t('col.title')}</h2>
           </div>
           <p className="text-muted-foreground max-w-md text-right md:text-left">
             {t('col.desc')}
@@ -78,7 +78,7 @@ export function ProductCollection() {
                     <Badge variant="secondary" className={`mb-3 hover:bg-white/50 border-none ${collection.color}`}>
                       {collection.category}
                     </Badge>
-                    <h3 className="text-2xl font-serif font-semibold text-primary mb-1">
+                    <h3 className="text-2xl font-semibold text-primary mb-1">
                       {collection.name}
                     </h3>
                     <p className="text-sm text-muted-foreground">{t('col.view')}</p>
