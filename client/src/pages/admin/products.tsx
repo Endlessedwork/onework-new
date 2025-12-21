@@ -8,6 +8,18 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+
+const CATEGORIES = [
+  "Toiletries",
+  "Amenities", 
+  "Room Amenities",
+  "Bathroom Supplies",
+  "Spa Products",
+  "Housekeeping",
+  "Food & Beverage",
+  "Other"
+];
 import { toast } from "sonner";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import type { Product, InsertProduct } from "@shared/schema";
@@ -300,10 +312,21 @@ export default function AdminProducts() {
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label>Category</Label>
-                    <Input
+                    <Select
                       value={formData.category || ""}
-                      onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                    />
+                      onValueChange={(value) => setFormData({ ...formData, category: value })}
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select category" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {CATEGORIES.map((cat) => (
+                          <SelectItem key={cat} value={cat}>
+                            {cat}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                   </div>
                   <div className="space-y-2">
                     <Label>Sort Order</Label>
