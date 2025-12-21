@@ -10,19 +10,9 @@ import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
-const CATEGORIES = [
-  "Toiletries",
-  "Amenities", 
-  "Room Amenities",
-  "Bathroom Supplies",
-  "Spa Products",
-  "Housekeeping",
-  "Food & Beverage",
-  "Other"
-];
 import { toast } from "sonner";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import type { Product, InsertProduct } from "@shared/schema";
+import type { Product, InsertProduct, Category } from "@shared/schema";
 import { ObjectUploader } from "@/components/ObjectUploader";
 
 export default function AdminProducts() {
@@ -65,6 +55,15 @@ export default function AdminProducts() {
     queryFn: async () => {
       const response = await fetch("/api/admin/products", { credentials: "include" });
       if (!response.ok) throw new Error("Failed to fetch products");
+      return response.json();
+    },
+  });
+
+  const { data: categories = [] } = useQuery<Category[]>({
+    queryKey: ["/api/admin/categories"],
+    queryFn: async () => {
+      const response = await fetch("/api/admin/categories", { credentials: "include" });
+      if (!response.ok) throw new Error("Failed to fetch categories");
       return response.json();
     },
   });
@@ -320,11 +319,17 @@ export default function AdminProducts() {
                         <SelectValue placeholder="Select category" />
                       </SelectTrigger>
                       <SelectContent>
-                        {CATEGORIES.map((cat) => (
-                          <SelectItem key={cat} value={cat}>
-                            {cat}
+                        {categories.length > 0 ? (
+                          categories.map((cat) => (
+                            <SelectItem key={cat.id} value={cat.nameEn}>
+                              {cat.nameEn}
+                            </SelectItem>
+                          ))
+                        ) : (
+                          <SelectItem value="Other" disabled>
+                            No categories available
                           </SelectItem>
-                        ))}
+                        )}
                       </SelectContent>
                     </Select>
                   </div>
