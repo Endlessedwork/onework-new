@@ -14,6 +14,7 @@ import Customers from "@/pages/customers";
 import AdminLogin from "@/pages/admin/login";
 import AdminDashboard from "@/pages/admin/dashboard";
 import AdminProducts from "@/pages/admin/products";
+import AdminCategories from "@/pages/admin/categories";
 import AdminSettings from "@/pages/admin/settings";
 
 function Router() {
@@ -30,6 +31,7 @@ function Router() {
       <Route path="/admin/login" component={AdminLogin} />
       <Route path="/admin/dashboard" component={AdminDashboard} />
       <Route path="/admin/products" component={AdminProducts} />
+      <Route path="/admin/categories" component={AdminCategories} />
       <Route path="/admin/settings" component={AdminSettings} />
       
       <Route component={NotFound} />

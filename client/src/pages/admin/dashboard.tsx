@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useLocation, Link } from "wouter";
 import { Button } from "@/components/ui/button";
-import { LogOut, Package, Settings, Plus } from "lucide-react";
+import { LogOut, Package, Settings, Plus, FolderTree } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "sonner";
 
@@ -69,6 +69,11 @@ export default function AdminDashboard() {
                   Products
                 </a>
               </Link>
+              <Link href="/admin/categories">
+                <a className="text-sm font-medium text-foreground/80 hover:text-primary transition-colors">
+                  Categories
+                </a>
+              </Link>
               <Link href="/admin/settings">
                 <a className="text-sm font-medium text-foreground/80 hover:text-primary transition-colors">
                   Settings
@@ -125,6 +130,26 @@ export default function AdminDashboard() {
                 <Button variant="outline" className="w-full">
                   <Plus className="w-4 h-4 mr-2" />
                   Go to Products
+                </Button>
+              </CardContent>
+            </Card>
+          </Link>
+
+          <Link href="/admin/categories">
+            <Card className="hover:shadow-lg transition-shadow cursor-pointer group">
+              <CardHeader>
+                <div className="w-12 h-12 rounded-lg bg-orange-100 flex items-center justify-center mb-4 group-hover:bg-orange-500 group-hover:text-white transition-colors">
+                  <FolderTree className="w-6 h-6 text-orange-600 group-hover:text-white" />
+                </div>
+                <CardTitle>Manage Categories</CardTitle>
+                <CardDescription>
+                  Add, edit, or remove product categories
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <Button variant="outline" className="w-full">
+                  <Plus className="w-4 h-4 mr-2" />
+                  Go to Categories
                 </Button>
               </CardContent>
             </Card>
