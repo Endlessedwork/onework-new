@@ -44,8 +44,8 @@ export default function Contact() {
                     <div>
                       <h3 className="font-semibold text-lg mb-1">{t('contact.head')}</h3>
                       <p className="text-muted-foreground leading-relaxed">
-                        123 Sukhumvit Road, Watthana,<br />
-                        Bangkok 10110, Thailand
+                        75/5 หมู่ 6 ซ.ท่าทราย ถ.ปู่เจ้าสมิงพราย<br />
+                        ต.สำโรง อ.พระประแดง จ.สมุทรปราการ 10130
                       </p>
                     </div>
                   </div>
@@ -57,8 +57,8 @@ export default function Contact() {
                     <div>
                       <h3 className="font-semibold text-lg mb-1">{t('contact.phone')}</h3>
                       <p className="text-muted-foreground">
-                        +66 2 123 4567<br />
-                        +66 81 987 6543
+                        06 2862 8877<br />
+                        Line ID: @onework
                       </p>
                     </div>
                   </div>
@@ -70,8 +70,8 @@ export default function Contact() {
                     <div>
                       <h3 className="font-semibold text-lg mb-1">{t('contact.email')}</h3>
                       <p className="text-muted-foreground">
-                        hello@onework.co.th<br />
-                        sales@onework.co.th
+                        contact@oneworkproduct.com<br />
+                        onework.co.th
                       </p>
                     </div>
                   </div>

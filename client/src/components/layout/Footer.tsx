@@ -42,9 +42,10 @@ export function Footer() {
           <div>
             <h4 className="text-lg font-heading font-semibold mb-6 text-accent">{t('nav.contact')}</h4>
             <address className="not-italic text-white/70 space-y-4">
-              <p>123 Sukhumvit Road,<br />Bangkok, Thailand 10110</p>
-              <p>+66 2 123 4567</p>
-              <p>hello@onework.co.th</p>
+              <p>75/5 หมู่ 6 ซ.ท่าทราย<br />ถ.ปู่เจ้าสมิงพราย ต.สำโรง<br />อ.พระประแดง จ.สมุทรปราการ 10130</p>
+              <p>06 2862 8877</p>
+              <p>contact@oneworkproduct.com</p>
+              <p>Line: @onework</p>
             </address>
           </div>
         </div>
