@@ -42,7 +42,7 @@ export function Footer() {
           <div>
             <h4 className="text-lg font-heading font-semibold mb-6 text-accent">{t('nav.contact')}</h4>
             <address className="not-italic text-white/70 space-y-4">
-              <p>75/5 หมู่ 6 ซ.ท่าทราย<br />ถ.ปู่เจ้าสมิงพราย ต.สำโรง<br />อ.พระประแดง จ.สมุทรปราการ 10130</p>
+              <p>75/5 Moo 6, Soi Tha Sai,<br />Pu Chao Saming Phrai Road,<br />Samrong, Phra Pradaeng,<br />Samut Prakan 10130 Thailand</p>
               <p>06 2862 8877</p>
               <p>contact@oneworkproduct.com</p>
               <p>Line: @onework</p>
