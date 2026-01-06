@@ -412,15 +412,22 @@ export default function AdminProducts() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {products.map((product) => (
               <Card key={product.id} className="overflow-hidden">
-                {product.imageUrl && (
-                  <div className="aspect-square bg-gray-100">
+                <div className="aspect-square bg-gray-100">
+                  {product.imageUrl ? (
                     <img
                       src={product.imageUrl}
                       alt={product.name}
                       className="w-full h-full object-cover"
                     />
-                  </div>
-                )}
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center text-gray-400">
+                      <div className="text-center">
+                        <Image className="w-12 h-12 mx-auto mb-2 opacity-50" />
+                        <span className="text-sm">No Image</span>
+                      </div>
+                    </div>
+                  )}
+                </div>
                 <CardContent className="p-4">
                   <div className="flex items-start justify-between mb-2">
                     <div className="flex-1">
