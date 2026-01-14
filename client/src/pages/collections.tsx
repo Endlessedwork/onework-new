@@ -1,6 +1,6 @@
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -8,6 +8,7 @@ import { useLanguage } from "@/lib/i18n";
 import { useQuery } from "@tanstack/react-query";
 import type { Product } from "@shared/schema";
 import { useState, useMemo } from "react";
+import { ArrowLeft, ChevronRight } from "lucide-react";
 
 import imgBeChic from "@assets/generated_images/be_chic_collection_amenities.png";
 import imgBliss from "@assets/generated_images/bliss_collection_amenities.png";
@@ -25,6 +26,13 @@ import imgTheBeyond from "@assets/generated_images/the_beyond_collection_ameniti
 import imgHappyLittleOne from "@assets/generated_images/happy_little_one_collection_amenities.png";
 import imgSlippers from "@assets/generated_images/hotel_slippers_collection.png";
 import imgBulk from "@assets/generated_images/bulk_4l_hotel_products.png";
+
+import imgBudgetHero from "@assets/generated_images/budget_series_hero_banner.png";
+import imgStandardHero from "@assets/generated_images/standard_series_hero_banner.png";
+import imgPremiumHero from "@assets/generated_images/premium_series_hero_banner.png";
+import imgLuxuryHero from "@assets/generated_images/luxury_series_hero_banner.png";
+import imgEarthHero from "@assets/generated_images/earth_series_hero_banner.png";
+import imgKidsHero from "@assets/generated_images/kids_series_hero_banner.png";
 
 const collectionImages: Record<string, string> = {
   "Be Chic": imgBeChic,
@@ -55,62 +63,88 @@ const collectionImages: Record<string, string> = {
 
 const defaultImage = imgSeaBreeze;
 
-const seriesInfo: Record<string, { nameEn: string; nameTh: string; description: string; descriptionTh: string; color: string }> = {
+interface SeriesData {
+  nameEn: string;
+  nameTh: string;
+  description: string;
+  descriptionTh: string;
+  color: string;
+  gradient: string;
+  heroImage: string;
+}
+
+const seriesInfo: Record<string, SeriesData> = {
   "Budget Series": {
     nameEn: "Budget Series",
     nameTh: "ซีรีส์งบประมาณ",
     description: "Products for Budget Hotels with good price and smart look",
     descriptionTh: "สินค้าสำหรับโรงแรมงบประมาณ ราคาดี ดูดี",
-    color: "bg-blue-500"
+    color: "bg-blue-500",
+    gradient: "from-blue-600 to-blue-400",
+    heroImage: imgBudgetHero,
   },
   "Standard Series": {
     nameEn: "Standard Series",
     nameTh: "ซีรีส์มาตรฐาน",
     description: "Standard quality products for various hotel styles",
     descriptionTh: "สินค้าคุณภาพมาตรฐาน เหมาะกับโรงแรมหลากหลายสไตล์",
-    color: "bg-green-500"
+    color: "bg-green-500",
+    gradient: "from-green-600 to-green-400",
+    heroImage: imgStandardHero,
   },
   "Premium Series": {
     nameEn: "Premium Series",
     nameTh: "ซีรีส์พรีเมียม",
     description: "Premium quality products with elegant design",
     descriptionTh: "สินค้าคุณภาพพรีเมียม ดีไซน์หรูหรา",
-    color: "bg-purple-500"
+    color: "bg-purple-500",
+    gradient: "from-purple-600 to-purple-400",
+    heroImage: imgPremiumHero,
   },
   "Luxury Series": {
     nameEn: "Luxury Series",
     nameTh: "ซีรีส์ลักซูรี่",
     description: "Luxury products for upscale hotels and resorts",
     descriptionTh: "สินค้าหรูหราสำหรับโรงแรมและรีสอร์ทระดับสูง",
-    color: "bg-amber-500"
+    color: "bg-amber-500",
+    gradient: "from-amber-600 to-amber-400",
+    heroImage: imgLuxuryHero,
   },
   "Earth Series": {
     nameEn: "Earth Series",
     nameTh: "ซีรีส์รักษ์โลก",
     description: "Eco-friendly and environmentally conscious products",
     descriptionTh: "สินค้าเป็นมิตรกับสิ่งแวดล้อม รักษ์โลก",
-    color: "bg-emerald-600"
+    color: "bg-emerald-600",
+    gradient: "from-emerald-700 to-emerald-500",
+    heroImage: imgEarthHero,
   },
   "Kids Series": {
     nameEn: "Kids Series",
     nameTh: "ซีรีส์สำหรับเด็ก",
     description: "Special products designed for children",
     descriptionTh: "สินค้าพิเศษออกแบบสำหรับเด็ก",
-    color: "bg-pink-500"
+    color: "bg-pink-500",
+    gradient: "from-pink-600 to-pink-400",
+    heroImage: imgKidsHero,
   },
   "Bulk Products": {
     nameEn: "Bulk Products",
     nameTh: "สินค้าขนาดใหญ่",
     description: "Large size refill products 4L",
     descriptionTh: "สินค้าขนาดใหญ่ 4 ลิตร สำหรับเติม",
-    color: "bg-orange-500"
+    color: "bg-orange-500",
+    gradient: "from-orange-600 to-orange-400",
+    heroImage: imgBulk,
   },
   "Accessories": {
     nameEn: "Accessories",
     nameTh: "อุปกรณ์เสริม",
     description: "Slippers, bags, door hangers and other accessories",
     descriptionTh: "รองเท้าสลิปเปอร์ ถุง ป้ายคล้องประตู และอุปกรณ์อื่นๆ",
-    color: "bg-slate-500"
+    color: "bg-slate-500",
+    gradient: "from-slate-600 to-slate-400",
+    heroImage: imgSlippers,
   },
 };
 
@@ -118,7 +152,8 @@ const seriesOrder = ["Budget Series", "Standard Series", "Premium Series", "Luxu
 
 export default function Collections() {
   const { t, language } = useLanguage();
-  const [selectedSeries, setSelectedSeries] = useState<string>("all");
+  const [selectedSeries, setSelectedSeries] = useState<string | null>(null);
+  const [selectedCollection, setSelectedCollection] = useState<string | null>(null);
 
   const { data: products = [], isLoading } = useQuery<Product[]>({
     queryKey: ["/api/products"],
@@ -145,151 +180,291 @@ export default function Collections() {
     return seriesOrder.filter(s => productsBySeries[s] && Object.keys(productsBySeries[s]).length > 0);
   }, [productsBySeries]);
 
-  const filteredSeries = selectedSeries === "all" ? availableSeries : [selectedSeries];
+  const handleSeriesClick = (series: string) => {
+    setSelectedSeries(series);
+    setSelectedCollection(null);
+  };
+
+  const handleBack = () => {
+    if (selectedCollection) {
+      setSelectedCollection(null);
+    } else {
+      setSelectedSeries(null);
+    }
+  };
+
+  const renderSeriesGrid = () => (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
+    >
+      {availableSeries.map((series, index) => {
+        const info = seriesInfo[series];
+        const collections = productsBySeries[series] || {};
+        const collectionCount = Object.keys(collections).length;
+        const productCount = Object.values(collections).flat().length;
+
+        return (
+          <motion.div
+            key={series}
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: index * 0.1 }}
+            onClick={() => handleSeriesClick(series)}
+            className="cursor-pointer group"
+            data-testid={`series-card-${series}`}
+          >
+            <Card className="overflow-hidden border-none shadow-lg hover:shadow-2xl transition-all duration-500 h-full">
+              <div className="relative h-48 overflow-hidden">
+                <img
+                  src={info.heroImage}
+                  alt={language === 'th' ? info.nameTh : info.nameEn}
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                />
+                <div className={`absolute inset-0 bg-gradient-to-t ${info.gradient} opacity-60 group-hover:opacity-70 transition-opacity`} />
+                <div className="absolute inset-0 flex flex-col justify-end p-6 text-white">
+                  <h3 className="text-2xl font-heading font-bold mb-1">
+                    {language === 'th' ? info.nameTh : info.nameEn}
+                  </h3>
+                  <p className="text-sm text-white/90">
+                    {collectionCount} {language === 'th' ? 'คอลเลคชั่น' : 'Collections'} • {productCount} {language === 'th' ? 'รายการ' : 'Products'}
+                  </p>
+                </div>
+                <div className="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center group-hover:bg-white/40 transition-colors">
+                  <ChevronRight className="w-5 h-5 text-white" />
+                </div>
+              </div>
+              <CardContent className="p-4 bg-white">
+                <p className="text-sm text-muted-foreground line-clamp-2">
+                  {language === 'th' ? info.descriptionTh : info.description}
+                </p>
+              </CardContent>
+            </Card>
+          </motion.div>
+        );
+      })}
+    </motion.div>
+  );
+
+  const renderSeriesDetail = () => {
+    if (!selectedSeries) return null;
+    const info = seriesInfo[selectedSeries];
+    const collections = productsBySeries[selectedSeries] || {};
+
+    return (
+      <motion.div
+        initial={{ opacity: 0, x: 20 }}
+        animate={{ opacity: 1, x: 0 }}
+        exit={{ opacity: 0, x: -20 }}
+        className="space-y-8"
+      >
+        <div className="relative h-64 md:h-80 rounded-2xl overflow-hidden">
+          <img
+            src={info.heroImage}
+            alt={language === 'th' ? info.nameTh : info.nameEn}
+            className="w-full h-full object-cover"
+          />
+          <div className={`absolute inset-0 bg-gradient-to-r ${info.gradient} opacity-70`} />
+          <div className="absolute inset-0 flex flex-col justify-center p-8 md:p-12 text-white">
+            <Badge className="w-fit mb-4 bg-white/20 backdrop-blur-sm text-white border-none">
+              {Object.keys(collections).length} {language === 'th' ? 'คอลเลคชั่น' : 'Collections'}
+            </Badge>
+            <h2 className="text-4xl md:text-5xl font-heading font-bold mb-4">
+              {language === 'th' ? info.nameTh : info.nameEn}
+            </h2>
+            <p className="text-lg text-white/90 max-w-xl">
+              {language === 'th' ? info.descriptionTh : info.description}
+            </p>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {Object.entries(collections).map(([collectionName, collectionProducts], index) => {
+            const collectionImage = collectionImages[collectionName] || defaultImage;
+            const displayName = language === 'th' && collectionProducts[0]?.collectionTh
+              ? collectionProducts[0].collectionTh
+              : collectionProducts[0]?.collectionEn || collectionName;
+
+            return (
+              <motion.div
+                key={collectionName}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.1 }}
+                onClick={() => setSelectedCollection(collectionName)}
+                className="cursor-pointer group"
+                data-testid={`collection-card-${collectionName}`}
+              >
+                <Card className="overflow-hidden border-none shadow-md hover:shadow-xl transition-all duration-300 h-full">
+                  <div className="relative aspect-[4/3] overflow-hidden">
+                    <img
+                      src={collectionImage}
+                      alt={displayName}
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                  </div>
+                  <CardContent className="p-5">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <h3 className="text-lg font-heading font-semibold text-foreground group-hover:text-primary transition-colors">
+                          {displayName}
+                        </h3>
+                        <p className="text-sm text-muted-foreground">
+                          {collectionProducts.length} {language === 'th' ? 'รายการ' : 'products'}
+                        </p>
+                      </div>
+                      <ChevronRight className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
+                    </div>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            );
+          })}
+        </div>
+      </motion.div>
+    );
+  };
+
+  const renderCollectionDetail = () => {
+    if (!selectedSeries || !selectedCollection) return null;
+    const info = seriesInfo[selectedSeries];
+    const collectionProducts = productsBySeries[selectedSeries]?.[selectedCollection] || [];
+    const collectionImage = collectionImages[selectedCollection] || defaultImage;
+    const displayName = language === 'th' && collectionProducts[0]?.collectionTh
+      ? collectionProducts[0].collectionTh
+      : collectionProducts[0]?.collectionEn || selectedCollection;
+
+    return (
+      <motion.div
+        initial={{ opacity: 0, x: 20 }}
+        animate={{ opacity: 1, x: 0 }}
+        exit={{ opacity: 0, x: -20 }}
+        className="space-y-8"
+      >
+        <div className="relative h-48 md:h-64 rounded-2xl overflow-hidden">
+          <img
+            src={collectionImage}
+            alt={displayName}
+            className="w-full h-full object-cover"
+          />
+          <div className={`absolute inset-0 bg-gradient-to-r ${info.gradient} opacity-60`} />
+          <div className="absolute inset-0 flex flex-col justify-center p-8 md:p-12 text-white">
+            <Badge className="w-fit mb-2 bg-white/20 backdrop-blur-sm text-white border-none">
+              {language === 'th' ? info.nameTh : info.nameEn}
+            </Badge>
+            <h2 className="text-3xl md:text-4xl font-heading font-bold mb-2">
+              {displayName}
+            </h2>
+            <p className="text-white/90">
+              {collectionProducts.length} {language === 'th' ? 'รายการ' : 'Products'}
+            </p>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+          {collectionProducts.map((product, index) => {
+            const productName = language === 'th' && product.nameTh
+              ? product.nameTh
+              : product.nameEn || product.name;
+            const productDesc = language === 'th' && product.descriptionTh
+              ? product.descriptionTh
+              : product.descriptionEn || product.description;
+            const productImage = product.imageUrl || collectionImages[product.collection] || defaultImage;
+
+            return (
+              <motion.div
+                key={product.id}
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: index * 0.05 }}
+              >
+                <Card className="border-none shadow-sm hover:shadow-lg transition-all duration-300 group h-full overflow-hidden">
+                  <div className="aspect-square relative overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100">
+                    <img
+                      src={productImage}
+                      alt={productName}
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                    />
+                  </div>
+                  <CardContent className="p-3" data-testid={`product-${product.id}`}>
+                    <h4 className="text-sm font-heading font-semibold text-foreground mb-1 group-hover:text-primary transition-colors line-clamp-2">
+                      {productName}
+                    </h4>
+                    {productDesc && (
+                      <p className="text-xs text-muted-foreground line-clamp-2">
+                        {productDesc}
+                      </p>
+                    )}
+                  </CardContent>
+                </Card>
+              </motion.div>
+            );
+          })}
+        </div>
+      </motion.div>
+    );
+  };
 
   return (
     <div className="min-h-screen bg-background text-foreground font-sans">
       <Navbar />
       <main className="pt-24">
-        <section className="bg-gradient-to-b from-primary/10 to-background py-20">
-          <div className="container mx-auto px-4 text-center">
-            <motion.h1
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="text-4xl md:text-6xl font-heading font-bold text-primary mb-6"
-            >
-              {t('col.page.title')}
-            </motion.h1>
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 }}
-              className="text-lg text-muted-foreground max-w-2xl mx-auto"
-            >
-              {t('col.page.desc')}
-            </motion.p>
+        <section className="bg-gradient-to-b from-primary/10 to-background py-16">
+          <div className="container mx-auto px-4">
+            {(selectedSeries || selectedCollection) && (
+              <motion.div
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
+                className="mb-6"
+              >
+                <Button
+                  variant="ghost"
+                  onClick={handleBack}
+                  className="gap-2 font-heading hover:bg-primary/10"
+                  data-testid="back-button"
+                >
+                  <ArrowLeft className="w-4 h-4" />
+                  {selectedCollection
+                    ? (language === 'th' ? 'กลับไปคอลเลคชั่น' : 'Back to Collections')
+                    : (language === 'th' ? 'กลับไปซีรีส์' : 'Back to Series')}
+                </Button>
+              </motion.div>
+            )}
+
+            {!selectedSeries && (
+              <motion.div
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="text-center mb-12"
+              >
+                <h1 className="text-4xl md:text-5xl font-heading font-bold text-primary mb-4">
+                  {t('col.page.title')}
+                </h1>
+                <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+                  {language === 'th'
+                    ? 'เลือกซีรีส์ที่คุณสนใจเพื่อดูคอลเลคชั่นและสินค้าภายใน'
+                    : 'Select a series to explore collections and products'}
+                </p>
+              </motion.div>
+            )}
           </div>
         </section>
 
         <section className="py-12 container mx-auto px-4">
-          <div className="flex flex-wrap justify-center gap-3 mb-12">
-            <Button 
-              variant={selectedSeries === "all" ? "default" : "outline"}
-              className="rounded-full font-heading"
-              onClick={() => setSelectedSeries("all")}
-              data-testid="filter-all"
-            >
-              {language === 'th' ? 'ทั้งหมด' : 'All Series'}
-            </Button>
-            {availableSeries.map((series) => {
-              const info = seriesInfo[series];
-              return (
-                <Button 
-                  key={series}
-                  variant={selectedSeries === series ? "default" : "outline"}
-                  className="rounded-full font-heading"
-                  onClick={() => setSelectedSeries(series)}
-                  data-testid={`filter-${series}`}
-                >
-                  {language === 'th' ? info?.nameTh : info?.nameEn || series}
-                </Button>
-              );
-            })}
-          </div>
-
           {isLoading ? (
             <div className="text-center py-12">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4" />
               <p className="text-muted-foreground">{t('loading') || 'Loading...'}</p>
             </div>
           ) : (
-            <div className="space-y-20">
-              {filteredSeries.map((series) => {
-                const collections = productsBySeries[series];
-                if (!collections) return null;
-                const info = seriesInfo[series];
-
-                return (
-                  <motion.div
-                    key={series}
-                    initial={{ opacity: 0, y: 30 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    className="space-y-8"
-                  >
-                    <div className="text-center border-b pb-6">
-                      <Badge className={`${info?.color || 'bg-primary'} text-white mb-4`}>
-                        {language === 'th' ? info?.nameTh : info?.nameEn || series}
-                      </Badge>
-                      <h2 className="text-3xl font-heading font-bold text-foreground mb-2">
-                        {language === 'th' ? info?.nameTh : info?.nameEn || series}
-                      </h2>
-                      <p className="text-muted-foreground max-w-xl mx-auto">
-                        {language === 'th' ? info?.descriptionTh : info?.description}
-                      </p>
-                    </div>
-
-                    {Object.entries(collections).map(([collectionName, collectionProducts]) => (
-                      <div key={collectionName} className="space-y-6">
-                        <div className="flex items-center gap-4">
-                          <div className={`w-1 h-8 ${info?.color || 'bg-primary'} rounded-full`} />
-                          <h3 className="text-xl font-heading font-semibold text-foreground">
-                            {language === 'th' && collectionProducts[0]?.collectionTh
-                              ? collectionProducts[0].collectionTh
-                              : collectionProducts[0]?.collectionEn || collectionName}
-                          </h3>
-                          <span className="text-sm text-muted-foreground">
-                            ({collectionProducts.length} {language === 'th' ? 'รายการ' : 'items'})
-                          </span>
-                        </div>
-
-                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
-                          {collectionProducts.map((product, index) => {
-                            const productName = language === 'th' && product.nameTh
-                              ? product.nameTh
-                              : product.nameEn || product.name;
-                            const productDesc = language === 'th' && product.descriptionTh
-                              ? product.descriptionTh
-                              : product.descriptionEn || product.description;
-                            const productImage = product.imageUrl || collectionImages[product.collection] || defaultImage;
-
-                            return (
-                              <motion.div
-                                key={product.id}
-                                initial={{ opacity: 0, scale: 0.95 }}
-                                whileInView={{ opacity: 1, scale: 1 }}
-                                viewport={{ once: true }}
-                                transition={{ delay: index * 0.03 }}
-                              >
-                                <Card className="border-none shadow-sm hover:shadow-xl transition-all duration-300 group cursor-pointer h-full overflow-hidden">
-                                  <div className="aspect-square relative overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100">
-                                    <img 
-                                      src={productImage}
-                                      alt={productName}
-                                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                                    />
-                                    <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                                  </div>
-                                  <CardContent className="p-4" data-testid={`product-${product.id}`}>
-                                    <h4 className="text-sm font-heading font-semibold text-foreground mb-1 group-hover:text-primary transition-colors line-clamp-2">
-                                      {productName}
-                                    </h4>
-                                    {productDesc && (
-                                      <p className="text-xs text-muted-foreground line-clamp-2">
-                                        {productDesc}
-                                      </p>
-                                    )}
-                                  </CardContent>
-                                </Card>
-                              </motion.div>
-                            );
-                          })}
-                        </div>
-                      </div>
-                    ))}
-                  </motion.div>
-                );
-              })}
-            </div>
+            <AnimatePresence mode="wait">
+              {!selectedSeries && renderSeriesGrid()}
+              {selectedSeries && !selectedCollection && renderSeriesDetail()}
+              {selectedSeries && selectedCollection && renderCollectionDetail()}
+            </AnimatePresence>
           )}
         </section>
       </main>
