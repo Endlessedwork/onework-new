@@ -9,13 +9,43 @@ import { useQuery } from "@tanstack/react-query";
 import type { Product } from "@shared/schema";
 import { useState, useMemo } from "react";
 
-// Fallback images
-import imgSea from "@assets/generated_images/blue_ocean_themed_toiletries.png";
-import imgFlower from "@assets/generated_images/pink_floral_themed_toiletries.png";
-import imgLavender from "@assets/generated_images/lavender_themed_toiletries.png";
-import imgNatural from "@assets/generated_images/eco_natural_themed_toiletries.png";
+import imgBeChic from "@assets/generated_images/be_chic_collection_amenities.png";
+import imgBliss from "@assets/generated_images/bliss_collection_amenities.png";
+import imgSeaBreeze from "@assets/generated_images/sea_breeze_collection_amenities.png";
+import imgBloom from "@assets/generated_images/bloom_collection_amenities.png";
+import imgFlowerBlossom from "@assets/generated_images/flower_blossom_collection_amenities.png";
+import imgRiceMilk from "@assets/generated_images/rice_milk_collection_amenities.png";
+import imgLavender from "@assets/generated_images/lavender_collection_amenities.png";
+import imgHappyHolidays from "@assets/generated_images/happy_holidays_collection_amenities.png";
+import imgTheClassic from "@assets/generated_images/the_classic_collection_amenities.png";
+import imgSpaTherapy from "@assets/generated_images/spa_therapy_collection_amenities.png";
+import imgPCR from "@assets/generated_images/pcr_recycling_collection_amenities.png";
+import imgCareForNature from "@assets/generated_images/care_for_nature_collection_amenities.png";
+import imgTheBeyond from "@assets/generated_images/the_beyond_collection_amenities.png";
+import imgHappyLittleOne from "@assets/generated_images/happy_little_one_collection_amenities.png";
+import imgSlippers from "@assets/generated_images/hotel_slippers_collection.png";
 
-const fallbackImages = [imgSea, imgFlower, imgLavender, imgNatural];
+const collectionImages: Record<string, string> = {
+  "Be Chic": imgBeChic,
+  "Bliss": imgBliss,
+  "Sea Breeze": imgSeaBreeze,
+  "Bloom": imgBloom,
+  "Flower Blossom": imgFlowerBlossom,
+  "Rice Milk": imgRiceMilk,
+  "Lavender": imgLavender,
+  "Happy Holidays": imgHappyHolidays,
+  "The Classic": imgTheClassic,
+  "Spa Therapy": imgSpaTherapy,
+  "PCR Recycling": imgPCR,
+  "Care for Nature": imgCareForNature,
+  "The Beyond": imgTheBeyond,
+  "Happy Little One": imgHappyLittleOne,
+  "Slippers": imgSlippers,
+  "Bags": imgSlippers,
+  "Door Hangers": imgSlippers,
+};
+
+const defaultImage = imgSeaBreeze;
 
 export default function Collections() {
   const { t, language } = useLanguage();
@@ -114,7 +144,7 @@ export default function Collections() {
                  const collectionName = language === 'th' && product.collectionTh
                    ? product.collectionTh
                    : product.collectionEn || product.collection;
-                 const productImage = product.imageUrl || fallbackImages[index % fallbackImages.length];
+                 const productImage = product.imageUrl || collectionImages[product.collection] || defaultImage;
 
                  return (
                    <motion.div
