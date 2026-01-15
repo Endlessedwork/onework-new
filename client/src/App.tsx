@@ -16,6 +16,7 @@ import AdminDashboard from "@/pages/admin/dashboard";
 import AdminProducts from "@/pages/admin/products";
 import AdminCategories from "@/pages/admin/categories";
 import AdminSettings from "@/pages/admin/settings";
+import AdminChatbot from "@/pages/admin/chatbot";
 
 function Router() {
   return (
@@ -33,6 +34,7 @@ function Router() {
       <Route path="/admin/products" component={AdminProducts} />
       <Route path="/admin/categories" component={AdminCategories} />
       <Route path="/admin/settings" component={AdminSettings} />
+      <Route path="/admin/chatbot" component={AdminChatbot} />
       
       <Route component={NotFound} />
     </Switch>
