@@ -87,7 +87,7 @@ export * from "./models/chat";
 // Chatbot settings table
 export const chatbotSettings = pgTable("chatbot_settings", {
   id: serial("id").primaryKey(),
-  modelName: text("model_name").notNull().default("gpt-5"),
+  modelName: text("model_name").notNull().default("gpt-4o"),
   systemPrompt: text("system_prompt").notNull().default("You are a helpful assistant for a hotel amenities supplier. Answer questions about products, pricing, and services."),
   welcomeMessage: text("welcome_message").notNull().default("สวัสดีครับ! ยินดีต้อนรับสู่ Onework มีอะไรให้ช่วยไหมครับ?"),
   welcomeMessageEn: text("welcome_message_en").notNull().default("Hello! Welcome to Onework. How can I help you today?"),

@@ -17,6 +17,7 @@ import AdminProducts from "@/pages/admin/products";
 import AdminCategories from "@/pages/admin/categories";
 import AdminSettings from "@/pages/admin/settings";
 import AdminChatbot from "@/pages/admin/chatbot";
+import Chatbot from "@/components/Chatbot";
 
 function Router() {
   return (
@@ -48,6 +49,7 @@ function App() {
         <TooltipProvider>
           <Toaster />
           <Router />
+          <Chatbot />
         </TooltipProvider>
       </QueryClientProvider>
     </LanguageProvider>
