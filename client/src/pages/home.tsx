@@ -3,6 +3,7 @@ import { Hero } from "@/components/home/Hero";
 import { TrustSection } from "@/components/home/TrustSection";
 import { Services } from "@/components/home/Services";
 import { ProductCollection } from "@/components/home/ProductCollection";
+import { NewArrivals } from "@/components/home/NewArrivals";
 import { Footer } from "@/components/layout/Footer";
 import { useLanguage } from "@/lib/i18n";
 import { Link } from "wouter";
@@ -16,6 +17,7 @@ export default function Home() {
       <main>
         <Hero />
         <TrustSection />
+        <NewArrivals />
         <ProductCollection />
         <Services />
         <section className="py-24 bg-accent/20">
