@@ -3,9 +3,10 @@ import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { requireAuth, hashPassword } from "./auth";
 import passport from "passport";
-import { insertProductSchema, insertSettingSchema, insertUserSchema, insertCategorySchema } from "@shared/schema";
+import { insertProductSchema, insertSettingSchema, insertUserSchema, insertCategorySchema, insertChatbotSettingsSchema, insertChatbotTrainingDataSchema } from "@shared/schema";
 import { fromZodError } from "zod-validation-error";
 import { ObjectStorageService, ObjectNotFoundError } from "./objectStorage";
+import OpenAI from "openai";
 
 export async function registerRoutes(
   httpServer: Server,
@@ -307,6 +308,152 @@ export async function registerRoutes(
         return res.sendStatus(404);
       }
       return res.sendStatus(500);
+    }
+  });
+
+  // Chatbot settings routes (admin)
+  app.get("/api/admin/chatbot/settings", requireAuth, async (_req, res) => {
+    try {
+      const settings = await storage.getChatbotSettings();
+      res.send(settings || {});
+    } catch (error: any) {
+      res.status(500).send({ error: error.message });
+    }
+  });
+
+  app.patch("/api/admin/chatbot/settings", requireAuth, async (req, res) => {
+    try {
+      const result = insertChatbotSettingsSchema.partial().safeParse(req.body);
+      if (!result.success) {
+        return res.status(400).send({ error: fromZodError(result.error).message });
+      }
+      const settings = await storage.updateChatbotSettings(result.data);
+      res.send(settings);
+    } catch (error: any) {
+      res.status(500).send({ error: error.message });
+    }
+  });
+
+  // Chatbot training data routes (admin)
+  app.get("/api/admin/chatbot/training", requireAuth, async (_req, res) => {
+    try {
+      const data = await storage.getAllTrainingData();
+      res.send(data);
+    } catch (error: any) {
+      res.status(500).send({ error: error.message });
+    }
+  });
+
+  app.post("/api/admin/chatbot/training", requireAuth, async (req, res) => {
+    try {
+      const result = insertChatbotTrainingDataSchema.safeParse(req.body);
+      if (!result.success) {
+        return res.status(400).send({ error: fromZodError(result.error).message });
+      }
+      const data = await storage.createTrainingData(result.data);
+      res.send(data);
+    } catch (error: any) {
+      res.status(500).send({ error: error.message });
+    }
+  });
+
+  app.patch("/api/admin/chatbot/training/:id", requireAuth, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const result = insertChatbotTrainingDataSchema.partial().safeParse(req.body);
+      if (!result.success) {
+        return res.status(400).send({ error: fromZodError(result.error).message });
+      }
+      const data = await storage.updateTrainingData(id, result.data);
+      if (!data) {
+        return res.status(404).send({ error: "Training data not found" });
+      }
+      res.send(data);
+    } catch (error: any) {
+      res.status(500).send({ error: error.message });
+    }
+  });
+
+  app.delete("/api/admin/chatbot/training/:id", requireAuth, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const success = await storage.deleteTrainingData(id);
+      if (!success) {
+        return res.status(404).send({ error: "Training data not found" });
+      }
+      res.send({ success: true });
+    } catch (error: any) {
+      res.status(500).send({ error: error.message });
+    }
+  });
+
+  // Public chatbot endpoint
+  app.get("/api/chatbot/settings", async (req, res) => {
+    try {
+      const settings = await storage.getChatbotSettings();
+      if (!settings || !settings.isActive) {
+        return res.status(404).send({ error: "Chatbot not available" });
+      }
+      const lang = (req.query.lang as string) || "th";
+      res.send({
+        welcomeMessage: lang === "en" ? settings.welcomeMessageEn : settings.welcomeMessage,
+        isActive: settings.isActive,
+      });
+    } catch (error: any) {
+      res.status(500).send({ error: error.message });
+    }
+  });
+
+  app.post("/api/chatbot/message", async (req, res) => {
+    try {
+      const { message, language = "th" } = req.body;
+      if (!message) {
+        return res.status(400).send({ error: "Message is required" });
+      }
+
+      const settings = await storage.getChatbotSettings();
+      if (!settings || !settings.isActive) {
+        return res.status(404).send({ error: "Chatbot not available" });
+      }
+
+      const trainingData = await storage.getActiveTrainingData();
+      const products = await storage.getActiveProducts();
+
+      const productContext = products.map(p => 
+        language === "en" 
+          ? `- ${p.nameEn} (${p.collectionEn}): ${p.descriptionEn || "No description"}`
+          : `- ${p.nameTh} (${p.collectionTh}): ${p.descriptionTh || "ไม่มีคำอธิบาย"}`
+      ).join("\n");
+
+      const trainingContext = trainingData.map(td =>
+        `Q: ${td.question}\nA: ${td.answer}`
+      ).join("\n\n");
+
+      const systemPrompt = `${settings.systemPrompt}
+
+Available Products:
+${productContext}
+
+${trainingContext ? `Reference Q&A:\n${trainingContext}` : ""}
+
+Respond in ${language === "en" ? "English" : "Thai"}.`;
+
+      const openai = new OpenAI();
+      const completion = await openai.chat.completions.create({
+        model: settings.modelName,
+        messages: [
+          { role: "system", content: systemPrompt },
+          { role: "user", content: message }
+        ],
+        max_tokens: 500,
+      });
+
+      res.send({
+        reply: completion.choices[0]?.message?.content || "ขออภัย ไม่สามารถตอบได้ในขณะนี้",
+      });
+    } catch (error: any) {
+      console.error("Chatbot error:", error);
+      res.status(500).send({ error: "Failed to get response" });
     }
   });
 

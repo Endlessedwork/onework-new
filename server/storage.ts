@@ -1,4 +1,4 @@
-import { users, products, settings, categories, type User, type InsertUser, type Product, type InsertProduct, type Setting, type InsertSetting, type Category, type InsertCategory } from "@shared/schema";
+import { users, products, settings, categories, chatbotSettings, chatbotTrainingData, type User, type InsertUser, type Product, type InsertProduct, type Setting, type InsertSetting, type Category, type InsertCategory, type ChatbotSettings, type InsertChatbotSettings, type ChatbotTrainingData, type InsertChatbotTrainingData } from "@shared/schema";
 import { db } from "./db";
 import { eq } from "drizzle-orm";
 
@@ -28,6 +28,18 @@ export interface IStorage {
   createCategory(insertCategory: InsertCategory): Promise<Category>;
   updateCategory(id: number, insertCategory: Partial<InsertCategory>): Promise<Category | undefined>;
   deleteCategory(id: number): Promise<boolean>;
+
+  // Chatbot settings operations
+  getChatbotSettings(): Promise<ChatbotSettings | undefined>;
+  updateChatbotSettings(settings: Partial<InsertChatbotSettings>): Promise<ChatbotSettings>;
+
+  // Chatbot training data operations
+  getAllTrainingData(): Promise<ChatbotTrainingData[]>;
+  getActiveTrainingData(): Promise<ChatbotTrainingData[]>;
+  getTrainingData(id: number): Promise<ChatbotTrainingData | undefined>;
+  createTrainingData(data: InsertChatbotTrainingData): Promise<ChatbotTrainingData>;
+  updateTrainingData(id: number, data: Partial<InsertChatbotTrainingData>): Promise<ChatbotTrainingData | undefined>;
+  deleteTrainingData(id: number): Promise<boolean>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -154,6 +166,67 @@ export class DatabaseStorage implements IStorage {
 
   async deleteCategory(id: number): Promise<boolean> {
     const result = await db.delete(categories).where(eq(categories.id, id));
+    return result.rowCount ? result.rowCount > 0 : false;
+  }
+
+  // Chatbot settings operations
+  async getChatbotSettings(): Promise<ChatbotSettings | undefined> {
+    const [settings] = await db.select().from(chatbotSettings);
+    return settings || undefined;
+  }
+
+  async updateChatbotSettings(settingsData: Partial<InsertChatbotSettings>): Promise<ChatbotSettings> {
+    const existing = await this.getChatbotSettings();
+    
+    if (existing) {
+      const [updated] = await db
+        .update(chatbotSettings)
+        .set({ ...settingsData, updatedAt: new Date() })
+        .where(eq(chatbotSettings.id, existing.id))
+        .returning();
+      return updated;
+    } else {
+      const [created] = await db
+        .insert(chatbotSettings)
+        .values(settingsData as InsertChatbotSettings)
+        .returning();
+      return created;
+    }
+  }
+
+  // Chatbot training data operations
+  async getAllTrainingData(): Promise<ChatbotTrainingData[]> {
+    return db.select().from(chatbotTrainingData).orderBy(chatbotTrainingData.sortOrder);
+  }
+
+  async getActiveTrainingData(): Promise<ChatbotTrainingData[]> {
+    return db.select().from(chatbotTrainingData).where(eq(chatbotTrainingData.isActive, true)).orderBy(chatbotTrainingData.sortOrder);
+  }
+
+  async getTrainingData(id: number): Promise<ChatbotTrainingData | undefined> {
+    const [data] = await db.select().from(chatbotTrainingData).where(eq(chatbotTrainingData.id, id));
+    return data || undefined;
+  }
+
+  async createTrainingData(data: InsertChatbotTrainingData): Promise<ChatbotTrainingData> {
+    const [trainingData] = await db
+      .insert(chatbotTrainingData)
+      .values(data)
+      .returning();
+    return trainingData;
+  }
+
+  async updateTrainingData(id: number, data: Partial<InsertChatbotTrainingData>): Promise<ChatbotTrainingData | undefined> {
+    const [trainingData] = await db
+      .update(chatbotTrainingData)
+      .set({ ...data, updatedAt: new Date() })
+      .where(eq(chatbotTrainingData.id, id))
+      .returning();
+    return trainingData || undefined;
+  }
+
+  async deleteTrainingData(id: number): Promise<boolean> {
+    const result = await db.delete(chatbotTrainingData).where(eq(chatbotTrainingData.id, id));
     return result.rowCount ? result.rowCount > 0 : false;
   }
 }
