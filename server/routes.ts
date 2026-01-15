@@ -436,7 +436,7 @@ ${productContext}
 
 ${trainingContext ? `Reference Q&A:\n${trainingContext}` : ""}
 
-Respond in ${language === "en" ? "English" : "Thai"}.`;
+IMPORTANT: Detect the language of the customer's message and respond in the SAME language. If they write in Thai, respond in Thai. If they write in English, respond in English.`;
 
       const openai = new OpenAI({
         apiKey: process.env.OPENAI_API_KEY,
