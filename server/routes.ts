@@ -439,8 +439,7 @@ ${trainingContext ? `Reference Q&A:\n${trainingContext}` : ""}
 Respond in ${language === "en" ? "English" : "Thai"}.`;
 
       const openai = new OpenAI({
-        apiKey: process.env.AI_INTEGRATIONS_OPENAI_API_KEY,
-        baseURL: process.env.AI_INTEGRATIONS_OPENAI_BASE_URL,
+        apiKey: process.env.OPENAI_API_KEY,
       });
       const completion = await openai.chat.completions.create({
         model: settings.modelName,
