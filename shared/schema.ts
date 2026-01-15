@@ -80,3 +80,44 @@ export const insertCategorySchema = createInsertSchema(categories).omit({
 });
 export type InsertCategory = z.infer<typeof insertCategorySchema>;
 export type Category = typeof categories.$inferSelect;
+
+// Re-export chat models
+export * from "./models/chat";
+
+// Chatbot settings table
+export const chatbotSettings = pgTable("chatbot_settings", {
+  id: serial("id").primaryKey(),
+  modelName: text("model_name").notNull().default("gpt-5"),
+  systemPrompt: text("system_prompt").notNull().default("You are a helpful assistant for a hotel amenities supplier. Answer questions about products, pricing, and services."),
+  welcomeMessage: text("welcome_message").notNull().default("สวัสดีครับ! ยินดีต้อนรับสู่ Onework มีอะไรให้ช่วยไหมครับ?"),
+  welcomeMessageEn: text("welcome_message_en").notNull().default("Hello! Welcome to Onework. How can I help you today?"),
+  isActive: boolean("is_active").default(true).notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const insertChatbotSettingsSchema = createInsertSchema(chatbotSettings).omit({
+  id: true,
+  updatedAt: true,
+});
+export type InsertChatbotSettings = z.infer<typeof insertChatbotSettingsSchema>;
+export type ChatbotSettings = typeof chatbotSettings.$inferSelect;
+
+// Chatbot training data table
+export const chatbotTrainingData = pgTable("chatbot_training_data", {
+  id: serial("id").primaryKey(),
+  category: text("category").notNull(),
+  question: text("question").notNull(),
+  answer: text("answer").notNull(),
+  isActive: boolean("is_active").default(true).notNull(),
+  sortOrder: integer("sort_order").default(0).notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const insertChatbotTrainingDataSchema = createInsertSchema(chatbotTrainingData).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+export type InsertChatbotTrainingData = z.infer<typeof insertChatbotTrainingDataSchema>;
+export type ChatbotTrainingData = typeof chatbotTrainingData.$inferSelect;
