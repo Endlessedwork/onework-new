@@ -4,6 +4,7 @@ import { serveStatic } from "./static";
 import { createServer } from "http";
 import { setupAuth } from "./auth";
 import { setupWebSocket } from "./websocket";
+import { runChatMigration } from "./migrate";
 
 const app = express();
 const httpServer = createServer(app);
@@ -68,6 +69,9 @@ app.use((req, res, next) => {
 });
 
 (async () => {
+  // Run chat tables migration on startup
+  await runChatMigration();
+
   await registerRoutes(httpServer, app);
 
   app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
