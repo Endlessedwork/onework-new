@@ -24,12 +24,14 @@ async function seedProduction() {
   const db = drizzle(pool, { schema });
 
   // Check seed marker - use a specific setting key to track if properly seeded
+  // Version 2: force re-seed to fix password hash issue
+  const { eq } = require("drizzle-orm");
   const seedMarker = await db.select().from(schema.settings).where(
-    require("drizzle-orm").eq(schema.settings.key, "_seed_complete")
+    eq(schema.settings.key, "_seed_complete_v2")
   );
 
   if (seedMarker.length > 0) {
-    console.log("Database already fully seeded, skipping");
+    console.log("Database already fully seeded (v2), skipping");
     await pool.end();
     return;
   }
@@ -109,9 +111,9 @@ async function seedProduction() {
 
   // Add seed marker to prevent re-seeding
   await db.insert(schema.settings).values({
-    key: "_seed_complete",
+    key: "_seed_complete_v2",
     value: new Date().toISOString(),
-    description: "Marker to track successful seed completion",
+    description: "Marker to track successful seed completion (v2 with correct password hash)",
   });
 
   console.log("Seed completed!");
