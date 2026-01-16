@@ -4,7 +4,9 @@ import { storage } from "./storage";
 import { pool } from "./db";
 import { requireAuth, hashPassword } from "./auth";
 import passport from "passport";
-import { insertProductSchema, insertSettingSchema, insertUserSchema, insertCategorySchema, insertChatbotSettingsSchema, insertChatbotTrainingDataSchema } from "@shared/schema";
+import { insertProductSchema, insertSettingSchema, insertUserSchema, insertCategorySchema, insertChatbotSettingsSchema, insertChatbotTrainingDataSchema, startChatSchema, sendMessageSchema, updateConversationSchema, insertQuickResponseSchema } from "@shared/schema";
+import * as chatService from "./services/chatService";
+import * as lineService from "./services/lineService";
 import { fromZodError } from "zod-validation-error";
 import { LocalStorageService, ObjectNotFoundError } from "./localStorage";
 import multer from "multer";
@@ -513,6 +515,301 @@ IMPORTANT: Detect the language of the customer's message and respond in the SAME
         ? "ขออภัย เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง"
         : "Sorry, an error occurred. Please try again.";
       res.status(500).send({ error: "Failed to get response", reply: errorMessage });
+    }
+  });
+
+  // ============================================================
+  // CHAT SYSTEM ROUTES (New Persistent Chat)
+  // ============================================================
+
+  // Initialize OpenAI client if API key is available
+  const openaiClient = process.env.OPENAI_API_KEY
+    ? new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
+    : null;
+
+  // Public: Start or resume a chat conversation
+  app.post("/api/chat/start", async (req, res) => {
+    try {
+      const result = startChatSchema.safeParse(req.body);
+      if (!result.success) {
+        return res.status(400).send({ error: fromZodError(result.error).message });
+      }
+
+      const data = await chatService.startConversation(result.data);
+      res.send(data);
+    } catch (error: any) {
+      console.error("Start chat error:", error);
+      res.status(500).send({ error: error.message });
+    }
+  });
+
+  // Public: Send a message in the chat
+  app.post("/api/chat/message", async (req, res) => {
+    try {
+      const result = sendMessageSchema.safeParse(req.body);
+      if (!result.success) {
+        return res.status(400).send({ error: fromZodError(result.error).message });
+      }
+
+      const data = await chatService.sendMessage(result.data, openaiClient);
+      res.send(data);
+    } catch (error: any) {
+      console.error("Chat message error:", error);
+      res.status(500).send({ error: error.message });
+    }
+  });
+
+  // Public: Get chat history by session ID
+  app.get("/api/chat/history/:sessionId", async (req, res) => {
+    try {
+      const data = await chatService.getChatHistory(req.params.sessionId);
+      res.send(data);
+    } catch (error: any) {
+      res.status(500).send({ error: error.message });
+    }
+  });
+
+  // ============================================================
+  // ADMIN CHAT ROUTES
+  // ============================================================
+
+  // Admin: List all conversations
+  app.get("/api/admin/chat/conversations", requireAuth, async (req, res) => {
+    try {
+      const { status, channel, search, limit, offset } = req.query;
+      const data = await chatService.getConversations({
+        status: status as any,
+        channel: channel as any,
+        search: search as string,
+        limit: limit ? parseInt(limit as string) : undefined,
+        offset: offset ? parseInt(offset as string) : undefined,
+      });
+      res.send(data);
+    } catch (error: any) {
+      res.status(500).send({ error: error.message });
+    }
+  });
+
+  // Admin: Get conversation detail with messages
+  app.get("/api/admin/chat/conversations/:id", requireAuth, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const data = await chatService.getConversationById(id);
+
+      if (!data.conversation) {
+        return res.status(404).send({ error: "Conversation not found" });
+      }
+
+      // Mark messages as read
+      await chatService.markMessagesAsRead(id);
+
+      res.send(data);
+    } catch (error: any) {
+      res.status(500).send({ error: error.message });
+    }
+  });
+
+  // Admin: Update conversation (status, mode, customer info)
+  app.patch("/api/admin/chat/conversations/:id", requireAuth, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const result = updateConversationSchema.safeParse(req.body);
+
+      if (!result.success) {
+        return res.status(400).send({ error: fromZodError(result.error).message });
+      }
+
+      const conversation = await chatService.updateConversation(id, result.data);
+
+      if (!conversation) {
+        return res.status(404).send({ error: "Conversation not found" });
+      }
+
+      res.send(conversation);
+    } catch (error: any) {
+      res.status(500).send({ error: error.message });
+    }
+  });
+
+  // Admin: Delete conversation
+  app.delete("/api/admin/chat/conversations/:id", requireAuth, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const success = await chatService.deleteConversation(id);
+
+      if (!success) {
+        return res.status(404).send({ error: "Conversation not found" });
+      }
+
+      res.send({ success: true });
+    } catch (error: any) {
+      res.status(500).send({ error: error.message });
+    }
+  });
+
+  // Admin: Send message in a conversation
+  app.post("/api/admin/chat/conversations/:id/messages", requireAuth, async (req, res) => {
+    try {
+      const conversationId = parseInt(req.params.id);
+      const { content } = req.body;
+
+      if (!content || typeof content !== "string") {
+        return res.status(400).send({ error: "Content is required" });
+      }
+
+      const user = req.user as any;
+      const message = await chatService.adminSendMessage(conversationId, content, user.id);
+      res.send(message);
+    } catch (error: any) {
+      res.status(500).send({ error: error.message });
+    }
+  });
+
+  // Admin: Mark messages as read
+  app.patch("/api/admin/chat/conversations/:id/read", requireAuth, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      await chatService.markMessagesAsRead(id);
+      res.send({ success: true });
+    } catch (error: any) {
+      res.status(500).send({ error: error.message });
+    }
+  });
+
+  // ============================================================
+  // QUICK RESPONSES ROUTES
+  // ============================================================
+
+  // Admin: Get all quick responses
+  app.get("/api/admin/chat/quick-responses", requireAuth, async (_req, res) => {
+    try {
+      const data = await chatService.getAllQuickResponses();
+      res.send(data);
+    } catch (error: any) {
+      res.status(500).send({ error: error.message });
+    }
+  });
+
+  // Admin: Create quick response
+  app.post("/api/admin/chat/quick-responses", requireAuth, async (req, res) => {
+    try {
+      const result = insertQuickResponseSchema.safeParse(req.body);
+      if (!result.success) {
+        return res.status(400).send({ error: fromZodError(result.error).message });
+      }
+
+      const response = await chatService.createQuickResponse(result.data);
+      res.send(response);
+    } catch (error: any) {
+      res.status(500).send({ error: error.message });
+    }
+  });
+
+  // Admin: Update quick response
+  app.patch("/api/admin/chat/quick-responses/:id", requireAuth, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const result = insertQuickResponseSchema.partial().safeParse(req.body);
+
+      if (!result.success) {
+        return res.status(400).send({ error: fromZodError(result.error).message });
+      }
+
+      const response = await chatService.updateQuickResponse(id, result.data);
+
+      if (!response) {
+        return res.status(404).send({ error: "Quick response not found" });
+      }
+
+      res.send(response);
+    } catch (error: any) {
+      res.status(500).send({ error: error.message });
+    }
+  });
+
+  // Admin: Delete quick response
+  app.delete("/api/admin/chat/quick-responses/:id", requireAuth, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const success = await chatService.deleteQuickResponse(id);
+
+      if (!success) {
+        return res.status(404).send({ error: "Quick response not found" });
+      }
+
+      res.send({ success: true });
+    } catch (error: any) {
+      res.status(500).send({ error: error.message });
+    }
+  });
+
+  // ============================================================
+  // LINE SETTINGS ROUTES
+  // ============================================================
+
+  // Admin: Get LINE settings
+  app.get("/api/admin/line/settings", requireAuth, async (_req, res) => {
+    try {
+      const settings = await chatService.getLineSettings();
+      res.send(settings || {});
+    } catch (error: any) {
+      res.status(500).send({ error: error.message });
+    }
+  });
+
+  // Admin: Update LINE settings
+  app.patch("/api/admin/line/settings", requireAuth, async (req, res) => {
+    try {
+      const settings = await chatService.updateLineSettings(req.body);
+      res.send(settings);
+    } catch (error: any) {
+      res.status(500).send({ error: error.message });
+    }
+  });
+
+  // Admin: Test LINE connection
+  app.post("/api/admin/line/test", requireAuth, async (_req, res) => {
+    try {
+      const result = await lineService.testLineConnection();
+      res.send(result);
+    } catch (error: any) {
+      res.status(500).send({ error: error.message });
+    }
+  });
+
+  // ============================================================
+  // LINE WEBHOOK ENDPOINT
+  // ============================================================
+
+  // LINE Webhook - receives messages from LINE platform
+  // This endpoint must be publicly accessible and does not require auth
+  app.post("/api/webhook/line", async (req, res) => {
+    try {
+      // Get channel secret from database settings
+      const settings = await lineService.getLineSettings();
+      if (!settings?.channelSecret || !settings.isActive) {
+        console.warn("LINE webhook called but LINE is not configured or inactive");
+        return res.status(200).send("OK"); // Always return 200 to LINE
+      }
+
+      // Verify signature
+      const signature = req.headers["x-line-signature"] as string;
+      const body = JSON.stringify(req.body);
+
+      if (!signature || !lineService.verifySignature(body, signature, settings.channelSecret)) {
+        console.error("LINE webhook signature verification failed");
+        return res.status(403).send("Invalid signature");
+      }
+
+      // Handle events
+      const events = req.body.events || [];
+      await lineService.handleLineWebhook(events, settings.channelSecret);
+
+      res.status(200).send("OK");
+    } catch (error: any) {
+      console.error("LINE webhook error:", error);
+      // Always return 200 to LINE even on error to prevent retries
+      res.status(200).send("OK");
     }
   });
 

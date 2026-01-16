@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useLocation, Link } from "wouter";
 import { Button } from "@/components/ui/button";
-import { LogOut, Package, Settings, Plus, FolderTree, MessageSquare } from "lucide-react";
+import { LogOut, Package, Settings, Plus, FolderTree, MessageSquare, MessagesSquare } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "sonner";
 
@@ -82,6 +82,11 @@ export default function AdminDashboard() {
               <Link href="/admin/chatbot">
                 <a className="text-sm font-medium text-foreground/80 hover:text-primary transition-colors">
                   AI Chatbot
+                </a>
+              </Link>
+              <Link href="/admin/chat">
+                <a className="text-sm font-medium text-foreground/80 hover:text-primary transition-colors">
+                  Chat Management
                 </a>
               </Link>
             </nav>
@@ -193,6 +198,25 @@ export default function AdminDashboard() {
               <CardContent>
                 <Button variant="outline" className="w-full">
                   Manage Chatbot
+                </Button>
+              </CardContent>
+            </Card>
+          </Link>
+
+          <Link href="/admin/chat">
+            <Card className="hover:shadow-lg transition-shadow cursor-pointer group">
+              <CardHeader>
+                <div className="w-12 h-12 rounded-lg bg-green-100 flex items-center justify-center mb-4 group-hover:bg-green-500 group-hover:text-white transition-colors">
+                  <MessagesSquare className="w-6 h-6 text-green-600 group-hover:text-white" />
+                </div>
+                <CardTitle>Chat Management</CardTitle>
+                <CardDescription>
+                  View and respond to customer conversations
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <Button variant="outline" className="w-full">
+                  View Conversations
                 </Button>
               </CardContent>
             </Card>

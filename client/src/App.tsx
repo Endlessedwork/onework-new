@@ -18,6 +18,10 @@ import AdminCategories from "@/pages/admin/categories";
 import AdminSettings from "@/pages/admin/settings";
 import AdminChatbot from "@/pages/admin/chatbot";
 import AdminIndex from "@/pages/admin/index";
+import AdminChatDashboard from "@/pages/admin/chat/index";
+import AdminChatDetail from "@/pages/admin/chat/detail";
+import AdminQuickResponses from "@/pages/admin/chat/quick-responses";
+import AdminLineSettings from "@/pages/admin/chat/line-settings";
 import Chatbot from "@/components/Chatbot";
 
 function Router() {
@@ -38,7 +42,11 @@ function Router() {
       <Route path="/admin/categories" component={AdminCategories} />
       <Route path="/admin/settings" component={AdminSettings} />
       <Route path="/admin/chatbot" component={AdminChatbot} />
-      
+      <Route path="/admin/chat" component={AdminChatDashboard} />
+      <Route path="/admin/chat/:id" component={AdminChatDetail} />
+      <Route path="/admin/chat/quick-responses" component={AdminQuickResponses} />
+      <Route path="/admin/chat/line-settings" component={AdminLineSettings} />
+
       <Route component={NotFound} />
     </Switch>
   );
