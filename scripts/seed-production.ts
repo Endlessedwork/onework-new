@@ -23,11 +23,13 @@ async function seedProduction() {
   const pool = new Pool({ connectionString: process.env.DATABASE_URL });
   const db = drizzle(pool, { schema });
 
-  // Check if admin user exists (most critical piece)
-  const existingUsers = await db.select().from(schema.users);
+  // Check seed marker - use a specific setting key to track if properly seeded
+  const seedMarker = await db.select().from(schema.settings).where(
+    require("drizzle-orm").eq(schema.settings.key, "_seed_complete")
+  );
 
-  if (existingUsers.length > 0) {
-    console.log("Database already has admin user, skipping full seed");
+  if (seedMarker.length > 0) {
+    console.log("Database already fully seeded, skipping");
     await pool.end();
     return;
   }
@@ -41,6 +43,7 @@ async function seedProduction() {
   await db.delete(schema.settings);
   await db.delete(schema.products);
   await db.delete(schema.categories);
+  await db.delete(schema.users);
 
   // Load seed data
   const seedData = JSON.parse(fs.readFileSync("scripts/seed-data.json", "utf-8"));
@@ -103,6 +106,13 @@ async function seedProduction() {
     password: hashedPassword,
   });
   console.log("Created admin user (username: admin, password: admin123)");
+
+  // Add seed marker to prevent re-seeding
+  await db.insert(schema.settings).values({
+    key: "_seed_complete",
+    value: new Date().toISOString(),
+    description: "Marker to track successful seed completion",
+  });
 
   console.log("Seed completed!");
   await pool.end();
