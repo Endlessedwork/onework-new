@@ -56,7 +56,8 @@ export async function registerRoutes(
   app.post("/api/auth/login", (req, res, next) => {
     passport.authenticate("local", (err: any, user: any, info: any) => {
       if (err) {
-        return res.status(500).send({ error: "Authentication error" });
+        console.error("Login error:", err);
+        return res.status(500).send({ error: "Authentication error", details: err.message });
       }
       if (!user) {
         return res.status(401).send({ error: info?.message || "Login failed" });
