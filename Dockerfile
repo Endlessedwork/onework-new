@@ -29,8 +29,8 @@ RUN apk add --no-cache python3 make g++
 # Copy package files
 COPY package*.json ./
 
-# Install production dependencies + drizzle-kit for migrations
-RUN npm ci --omit=dev && npm install drizzle-kit && npm cache clean --force
+# Install production dependencies + drizzle-kit and tsx for migrations/seed
+RUN npm ci --omit=dev && npm install drizzle-kit tsx && npm cache clean --force
 
 # Remove build tools after installing
 RUN apk del python3 make g++
@@ -42,9 +42,9 @@ COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/drizzle.config.ts ./
 COPY --from=builder /app/shared ./shared
 
-# Copy startup script
-COPY --from=builder /app/scripts/start.sh ./
-RUN chmod +x start.sh
+# Copy all scripts (start.sh, seed-production.ts, seed-data.json)
+COPY --from=builder /app/scripts ./scripts
+RUN chmod +x scripts/start.sh
 
 # Create uploads directory
 RUN mkdir -p uploads && chown -R node:node uploads
@@ -60,4 +60,4 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=30s --retries=3 \
   CMD wget --no-verbose --tries=1 --spider http://localhost:3000/api/health || exit 1
 
 # Start with migration script
-CMD ["sh", "start.sh"]
+CMD ["sh", "scripts/start.sh"]
