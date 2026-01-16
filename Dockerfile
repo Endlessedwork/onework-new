@@ -16,7 +16,7 @@ RUN npm ci
 COPY . .
 
 # Build the application
-RUN npm run build
+RUN npm run build && rm -f dist/public/favicon.png
 
 # Production stage
 FROM node:20-alpine AS production
