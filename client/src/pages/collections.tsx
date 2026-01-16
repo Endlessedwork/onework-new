@@ -11,29 +11,29 @@ import type { Product } from "@shared/schema";
 import { useState, useMemo } from "react";
 import { ArrowLeft, ChevronRight, X, Package, Sparkles, Leaf, Tag } from "lucide-react";
 
-import imgBeChic from "@assets/generated_images/be_chic_collection_amenities.png";
-import imgBliss from "@assets/generated_images/bliss_collection_amenities.png";
-import imgSeaBreeze from "@assets/generated_images/sea_breeze_collection_amenities.png";
-import imgBloom from "@assets/generated_images/bloom_collection_amenities.png";
-import imgFlowerBlossom from "@assets/generated_images/flower_blossom_collection_amenities.png";
-import imgRiceMilk from "@assets/generated_images/rice_milk_collection_amenities.png";
-import imgLavender from "@assets/generated_images/lavender_collection_amenities.png";
-import imgHappyHolidays from "@assets/generated_images/happy_holidays_collection_amenities.png";
-import imgTheClassic from "@assets/generated_images/the_classic_collection_amenities.png";
-import imgSpaTherapy from "@assets/generated_images/spa_therapy_collection_amenities.png";
-import imgPCR from "@assets/generated_images/pcr_recycling_collection_amenities.png";
-import imgCareForNature from "@assets/generated_images/care_for_nature_collection_amenities.png";
-import imgTheBeyond from "@assets/generated_images/the_beyond_collection_amenities.png";
-import imgHappyLittleOne from "@assets/generated_images/happy_little_one_collection_amenities.png";
-import imgSlippers from "@assets/generated_images/hotel_slippers_collection.png";
-import imgBulk from "@assets/generated_images/bulk_4l_hotel_products.png";
+import imgBeChic from "@assets/generated_images_webp/be_chic_collection_amenities.webp";
+import imgBliss from "@assets/generated_images_webp/bliss_collection_amenities.webp";
+import imgSeaBreeze from "@assets/generated_images_webp/sea_breeze_collection_amenities.webp";
+import imgBloom from "@assets/generated_images_webp/bloom_collection_amenities.webp";
+import imgFlowerBlossom from "@assets/generated_images_webp/flower_blossom_collection_amenities.webp";
+import imgRiceMilk from "@assets/generated_images_webp/rice_milk_collection_amenities.webp";
+import imgLavender from "@assets/generated_images_webp/lavender_collection_amenities.webp";
+import imgHappyHolidays from "@assets/generated_images_webp/happy_holidays_collection_amenities.webp";
+import imgTheClassic from "@assets/generated_images_webp/the_classic_collection_amenities.webp";
+import imgSpaTherapy from "@assets/generated_images_webp/spa_therapy_collection_amenities.webp";
+import imgPCR from "@assets/generated_images_webp/pcr_recycling_collection_amenities.webp";
+import imgCareForNature from "@assets/generated_images_webp/care_for_nature_collection_amenities.webp";
+import imgTheBeyond from "@assets/generated_images_webp/the_beyond_collection_amenities.webp";
+import imgHappyLittleOne from "@assets/generated_images_webp/happy_little_one_collection_amenities.webp";
+import imgSlippers from "@assets/generated_images_webp/hotel_slippers_collection.webp";
+import imgBulk from "@assets/generated_images_webp/bulk_4l_hotel_products.webp";
 
-import imgBudgetHero from "@assets/generated_images/budget_series_hero_banner.png";
-import imgStandardHero from "@assets/generated_images/standard_series_hero_banner.png";
-import imgPremiumHero from "@assets/generated_images/premium_series_hero_banner.png";
-import imgLuxuryHero from "@assets/generated_images/luxury_series_hero_banner.png";
-import imgEarthHero from "@assets/generated_images/earth_series_hero_banner.png";
-import imgKidsHero from "@assets/generated_images/kids_series_hero_banner.png";
+import imgBudgetHero from "@assets/generated_images_webp/budget_series_hero_banner.webp";
+import imgStandardHero from "@assets/generated_images_webp/standard_series_hero_banner.webp";
+import imgPremiumHero from "@assets/generated_images_webp/premium_series_hero_banner.webp";
+import imgLuxuryHero from "@assets/generated_images_webp/luxury_series_hero_banner.webp";
+import imgEarthHero from "@assets/generated_images_webp/earth_series_hero_banner.webp";
+import imgKidsHero from "@assets/generated_images_webp/kids_series_hero_banner.webp";
 
 const collectionImages: Record<string, string> = {
   "Be Chic": imgBeChic,

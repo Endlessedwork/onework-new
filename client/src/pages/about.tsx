@@ -2,8 +2,8 @@ import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { motion } from "framer-motion";
 import { CheckCircle2 } from "lucide-react";
-import imgFactory from "@assets/generated_images/modern_clean_factory_production_line.png";
-import imgTeam from "@assets/generated_images/professional_team_meeting.png";
+import imgFactory from "@assets/generated_images_webp/modern_clean_factory_production_line.webp";
+import imgTeam from "@assets/generated_images_webp/professional_team_meeting.webp";
 import { useLanguage } from "@/lib/i18n";
 
 export default function About() {
@@ -37,10 +37,11 @@ export default function About() {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
             >
-              <img 
-                src={imgTeam} 
-                alt="Our Team" 
+              <img
+                src={imgTeam}
+                alt="Our Team"
                 className="rounded-2xl shadow-xl w-full h-[400px] object-cover"
+                loading="lazy"
               />
             </motion.div>
             <motion.div 
@@ -70,10 +71,11 @@ export default function About() {
                 viewport={{ once: true }}
                 className="order-first md:order-last"
               >
-                <img 
-                  src={imgFactory} 
-                  alt="Manufacturing" 
+                <img
+                  src={imgFactory}
+                  alt="Manufacturing"
                   className="rounded-2xl shadow-xl w-full h-[400px] object-cover"
+                  loading="lazy"
                 />
               </motion.div>
               <motion.div 

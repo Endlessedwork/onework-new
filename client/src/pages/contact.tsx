@@ -5,7 +5,7 @@ import { MapPin, Phone, Mail, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import imgOffice from "@assets/generated_images/modern_office_building_exterior.png";
+import imgOffice from "@assets/generated_images_webp/modern_office_building_exterior.webp";
 import { useLanguage } from "@/lib/i18n";
 
 export default function Contact() {
@@ -94,7 +94,7 @@ export default function Contact() {
               </div>
 
               <div className="rounded-2xl overflow-hidden shadow-lg h-[300px]">
-                <img src={imgOffice} alt="Office Building" className="w-full h-full object-cover" />
+                <img src={imgOffice} alt="Office Building" className="w-full h-full object-cover" loading="lazy" />
               </div>
             </motion.div>
 

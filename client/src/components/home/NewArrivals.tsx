@@ -6,20 +6,20 @@ import { useLanguage } from "@/lib/i18n";
 import { useQuery } from "@tanstack/react-query";
 import type { Product } from "@shared/schema";
 
-import imgBeChic from "@assets/generated_images/be_chic_collection_amenities.png";
-import imgBliss from "@assets/generated_images/bliss_collection_amenities.png";
-import imgSeaBreeze from "@assets/generated_images/sea_breeze_collection_amenities.png";
-import imgBloom from "@assets/generated_images/bloom_collection_amenities.png";
-import imgFlowerBlossom from "@assets/generated_images/flower_blossom_collection_amenities.png";
-import imgRiceMilk from "@assets/generated_images/rice_milk_collection_amenities.png";
-import imgLavender from "@assets/generated_images/lavender_collection_amenities.png";
-import imgHappyHolidays from "@assets/generated_images/happy_holidays_collection_amenities.png";
-import imgTheClassic from "@assets/generated_images/the_classic_collection_amenities.png";
-import imgSpaTherapy from "@assets/generated_images/spa_therapy_collection_amenities.png";
-import imgPCR from "@assets/generated_images/pcr_recycling_collection_amenities.png";
-import imgCareForNature from "@assets/generated_images/care_for_nature_collection_amenities.png";
-import imgTheBeyond from "@assets/generated_images/the_beyond_collection_amenities.png";
-import imgHappyLittleOne from "@assets/generated_images/happy_little_one_collection_amenities.png";
+import imgBeChic from "@assets/generated_images_webp/be_chic_collection_amenities.webp";
+import imgBliss from "@assets/generated_images_webp/bliss_collection_amenities.webp";
+import imgSeaBreeze from "@assets/generated_images_webp/sea_breeze_collection_amenities.webp";
+import imgBloom from "@assets/generated_images_webp/bloom_collection_amenities.webp";
+import imgFlowerBlossom from "@assets/generated_images_webp/flower_blossom_collection_amenities.webp";
+import imgRiceMilk from "@assets/generated_images_webp/rice_milk_collection_amenities.webp";
+import imgLavender from "@assets/generated_images_webp/lavender_collection_amenities.webp";
+import imgHappyHolidays from "@assets/generated_images_webp/happy_holidays_collection_amenities.webp";
+import imgTheClassic from "@assets/generated_images_webp/the_classic_collection_amenities.webp";
+import imgSpaTherapy from "@assets/generated_images_webp/spa_therapy_collection_amenities.webp";
+import imgPCR from "@assets/generated_images_webp/pcr_recycling_collection_amenities.webp";
+import imgCareForNature from "@assets/generated_images_webp/care_for_nature_collection_amenities.webp";
+import imgTheBeyond from "@assets/generated_images_webp/the_beyond_collection_amenities.webp";
+import imgHappyLittleOne from "@assets/generated_images_webp/happy_little_one_collection_amenities.webp";
 
 const collectionImages: Record<string, string> = {
   "Be Chic": imgBeChic,
@@ -97,6 +97,7 @@ export function NewArrivals() {
                       src={productImage}
                       alt={productName}
                       className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                      loading="lazy"
                     />
                     {index < 3 && (
                       <Badge className="absolute top-2 left-2 bg-amber-500 text-white border-none text-xs">

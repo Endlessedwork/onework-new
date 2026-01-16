@@ -1,12 +1,12 @@
 import { motion } from "framer-motion";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import imgSea from "@assets/generated_images/sea_breeze_collection_amenities.png";
-import imgFlower from "@assets/generated_images/flower_blossom_collection_amenities.png";
-import imgLavender from "@assets/generated_images/lavender_collection_amenities.png";
-import imgSpa from "@assets/generated_images/spa_therapy_collection_amenities.png";
-import imgEarth from "@assets/generated_images/care_for_nature_collection_amenities.png";
-import imgKids from "@assets/generated_images/happy_little_one_collection_amenities.png";
+import imgSea from "@assets/generated_images_webp/sea_breeze_collection_amenities.webp";
+import imgFlower from "@assets/generated_images_webp/flower_blossom_collection_amenities.webp";
+import imgLavender from "@assets/generated_images_webp/lavender_collection_amenities.webp";
+import imgSpa from "@assets/generated_images_webp/spa_therapy_collection_amenities.webp";
+import imgEarth from "@assets/generated_images_webp/care_for_nature_collection_amenities.webp";
+import imgKids from "@assets/generated_images_webp/happy_little_one_collection_amenities.webp";
 import { useLanguage } from "@/lib/i18n";
 import { Link } from "wouter";
 
@@ -109,6 +109,7 @@ export function ProductCollection() {
                       src={collection.image}
                       alt={language === 'th' ? collection.nameTh : collection.nameEn}
                       className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                      loading="lazy"
                     />
                     <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300" />
                   </div>

@@ -4,13 +4,13 @@ import { motion } from "framer-motion";
 import { useLanguage } from "@/lib/i18n";
 import { Star, Award, Clock, Shield } from "lucide-react";
 
-import imgHotel1 from "@assets/stock_images/luxury_hotel_lobby_i_171ab5c8.jpg";
-import imgHotel2 from "@assets/stock_images/luxury_hotel_lobby_i_e045d3f4.jpg";
-import imgHotel3 from "@assets/stock_images/luxury_hotel_lobby_i_088571db.jpg";
-import imgHospital1 from "@assets/stock_images/modern_hospital_buil_eeff8dc6.jpg";
-import imgHospital2 from "@assets/stock_images/modern_hospital_buil_a1bbe0a8.jpg";
-import imgResort1 from "@assets/stock_images/tropical_beach_resor_89b63aa5.jpg";
-import imgResort2 from "@assets/stock_images/tropical_beach_resor_d45875e8.jpg";
+import imgHotel1 from "@assets/stock_images_webp/luxury_hotel_lobby_i_171ab5c8.webp";
+import imgHotel2 from "@assets/stock_images_webp/luxury_hotel_lobby_i_e045d3f4.webp";
+import imgHotel3 from "@assets/stock_images_webp/luxury_hotel_lobby_i_088571db.webp";
+import imgHospital1 from "@assets/stock_images_webp/modern_hospital_buil_eeff8dc6.webp";
+import imgHospital2 from "@assets/stock_images_webp/modern_hospital_buil_a1bbe0a8.webp";
+import imgResort1 from "@assets/stock_images_webp/tropical_beach_resor_89b63aa5.webp";
+import imgResort2 from "@assets/stock_images_webp/tropical_beach_resor_d45875e8.webp";
 
 const hotelCustomers = [
   "Centara Hotels & Resorts",
@@ -66,9 +66,9 @@ export default function Customers() {
       <main className="pt-24">
         <section className="relative overflow-hidden">
           <div className="absolute inset-0 grid grid-cols-3 gap-1 opacity-20">
-            <img src={imgHotel1} alt="" className="w-full h-full object-cover" />
-            <img src={imgHotel2} alt="" className="w-full h-full object-cover" />
-            <img src={imgHotel3} alt="" className="w-full h-full object-cover" />
+            <img src={imgHotel1} alt="" className="w-full h-full object-cover" loading="lazy" />
+            <img src={imgHotel2} alt="" className="w-full h-full object-cover" loading="lazy" />
+            <img src={imgHotel3} alt="" className="w-full h-full object-cover" loading="lazy" />
           </div>
           <div className="absolute inset-0 bg-gradient-to-b from-white/90 via-white/95 to-white" />
           <div className="relative py-24">
@@ -136,8 +136,8 @@ export default function Customers() {
               viewport={{ once: true }}
               className="grid grid-cols-2 gap-4"
             >
-              <img src={imgHotel1} alt="Luxury Hotel" className="w-full h-48 object-cover rounded-2xl shadow-lg" />
-              <img src={imgHotel2} alt="Hotel Lobby" className="w-full h-48 object-cover rounded-2xl shadow-lg mt-8" />
+              <img src={imgHotel1} alt="Luxury Hotel" className="w-full h-48 object-cover rounded-2xl shadow-lg" loading="lazy" />
+              <img src={imgHotel2} alt="Hotel Lobby" className="w-full h-48 object-cover rounded-2xl shadow-lg mt-8" loading="lazy" />
             </motion.div>
           </div>
 
@@ -168,9 +168,9 @@ export default function Customers() {
                 className="order-2 lg:order-1"
               >
                 <div className="relative">
-                  <img src={imgHospital1} alt="Modern Hospital" className="w-full h-64 md:h-80 object-cover rounded-2xl shadow-xl" />
+                  <img src={imgHospital1} alt="Modern Hospital" className="w-full h-64 md:h-80 object-cover rounded-2xl shadow-xl" loading="lazy" />
                   <div className="absolute -bottom-6 -right-6 w-32 h-32 md:w-40 md:h-40">
-                    <img src={imgHospital2} alt="Healthcare" className="w-full h-full object-cover rounded-xl shadow-lg border-4 border-white" />
+                    <img src={imgHospital2} alt="Healthcare" className="w-full h-full object-cover rounded-xl shadow-lg border-4 border-white" loading="lazy" />
                   </div>
                 </div>
               </motion.div>
@@ -274,8 +274,8 @@ export default function Customers() {
               viewport={{ once: true }}
               className="grid grid-cols-2 gap-4"
             >
-              <img src={imgResort1} alt="Beach Resort" className="w-full h-48 object-cover rounded-2xl shadow-lg" />
-              <img src={imgResort2} alt="Tropical Resort" className="w-full h-48 object-cover rounded-2xl shadow-lg mt-8" />
+              <img src={imgResort1} alt="Beach Resort" className="w-full h-48 object-cover rounded-2xl shadow-lg" loading="lazy" />
+              <img src={imgResort2} alt="Tropical Resort" className="w-full h-48 object-cover rounded-2xl shadow-lg mt-8" loading="lazy" />
             </motion.div>
           </div>
         </section>

@@ -48,7 +48,18 @@ export async function registerRoutes(
     try {
       // Just check database connection (not query tables)
       await pool.query("SELECT 1");
-      res.status(200).json({ status: "healthy", timestamp: new Date().toISOString() });
+
+      // Check if chat tables exist
+      const tablesCheck = await pool.query(`
+        SELECT EXISTS (SELECT FROM information_schema.tables WHERE table_name = 'conversations')
+      `);
+      const chatTablesExist = tablesCheck.rows[0]?.exists || false;
+      res.status(200).json({
+        status: "healthy",
+        timestamp: new Date().toISOString(),
+        version: "2.0.0-chat",
+        chatTablesExist
+      });
     } catch (error) {
       res.status(503).json({ status: "unhealthy", error: "Database connection failed" });
     }

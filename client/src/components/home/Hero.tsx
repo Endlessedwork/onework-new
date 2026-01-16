@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
-import heroImage from "@assets/generated_images/luxury_hotel_amenities_hero_shot.png";
+import heroImage from "@assets/generated_images_webp/luxury_hotel_amenities_hero_shot.webp";
 import { useLanguage } from "@/lib/i18n";
 import { Link } from "wouter";
 
@@ -16,6 +16,8 @@ export function Hero() {
           src={heroImage}
           alt="Luxury Hotel Amenities"
           className="w-full h-full object-cover"
+          loading="eager"
+          fetchPriority="high"
         />
         <div className="absolute inset-0 bg-black/20" /> {/* Subtle overlay */}
         <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-transparent" />
