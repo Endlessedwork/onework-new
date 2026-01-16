@@ -17,6 +17,7 @@ import AdminProducts from "@/pages/admin/products";
 import AdminCategories from "@/pages/admin/categories";
 import AdminSettings from "@/pages/admin/settings";
 import AdminChatbot from "@/pages/admin/chatbot";
+import AdminIndex from "@/pages/admin/index";
 import Chatbot from "@/components/Chatbot";
 
 function Router() {
@@ -30,6 +31,7 @@ function Router() {
       <Route path="/customers" component={Customers} />
       
       {/* Admin routes */}
+      <Route path="/admin" component={AdminIndex} />
       <Route path="/admin/login" component={AdminLogin} />
       <Route path="/admin/dashboard" component={AdminDashboard} />
       <Route path="/admin/products" component={AdminProducts} />

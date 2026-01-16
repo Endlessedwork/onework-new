@@ -40,6 +40,17 @@ export async function registerRoutes(
   httpServer: Server,
   app: Express
 ): Promise<Server> {
+  // Health check endpoint for container orchestration
+  app.get("/api/health", async (req, res) => {
+    try {
+      // Check database connection
+      await storage.getAllProducts();
+      res.status(200).json({ status: "healthy", timestamp: new Date().toISOString() });
+    } catch (error) {
+      res.status(503).json({ status: "unhealthy", error: "Database connection failed" });
+    }
+  });
+
   // Auth routes
   app.post("/api/auth/login", (req, res, next) => {
     passport.authenticate("local", (err: any, user: any, info: any) => {
@@ -435,10 +446,21 @@ export async function registerRoutes(
   });
 
   app.post("/api/chatbot/message", async (req, res) => {
+    const { message, language = "th" } = req.body;
     try {
-      const { message, language = "th" } = req.body;
       if (!message) {
         return res.status(400).send({ error: "Message is required" });
+      }
+
+      // Check if OpenAI API key is configured
+      if (!process.env.OPENAI_API_KEY) {
+        console.warn("Chatbot: OPENAI_API_KEY not configured");
+        return res.status(503).send({
+          error: "Chatbot is not configured. Please set OPENAI_API_KEY.",
+          reply: language === "en"
+            ? "Sorry, the chatbot is currently unavailable. Please contact us directly."
+            : "ขออภัย แชทบอทไม่พร้อมใช้งานขณะนี้ กรุณาติดต่อเราโดยตรง"
+        });
       }
 
       const settings = await storage.getChatbotSettings();
@@ -449,8 +471,8 @@ export async function registerRoutes(
       const trainingData = await storage.getActiveTrainingData();
       const products = await storage.getActiveProducts();
 
-      const productContext = products.map(p => 
-        language === "en" 
+      const productContext = products.map(p =>
+        language === "en"
           ? `- ${p.nameEn} (${p.collectionEn}): ${p.descriptionEn || "No description"}`
           : `- ${p.nameTh} (${p.collectionTh}): ${p.descriptionTh || "ไม่มีคำอธิบาย"}`
       ).join("\n");
@@ -485,7 +507,10 @@ IMPORTANT: Detect the language of the customer's message and respond in the SAME
       });
     } catch (error: any) {
       console.error("Chatbot error:", error);
-      res.status(500).send({ error: "Failed to get response" });
+      const errorMessage = language === "th"
+        ? "ขออภัย เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง"
+        : "Sorry, an error occurred. Please try again.";
+      res.status(500).send({ error: "Failed to get response", reply: errorMessage });
     }
   });
 

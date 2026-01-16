@@ -84,26 +84,16 @@ export default function Chatbot() {
         body: JSON.stringify({ message: userMessage.content, language }),
       });
 
-      if (response.ok) {
-        const data = await response.json();
-        const botMessage: Message = {
-          id: Date.now() + 1,
-          content: data.reply,
-          isBot: true,
-          timestamp: new Date(),
-        };
-        setMessages(prev => [...prev, botMessage]);
-      } else {
-        const errorMessage: Message = {
-          id: Date.now() + 1,
-          content: language === "en" 
-            ? "Sorry, I couldn't process your request. Please try again."
-            : "ขออภัย ไม่สามารถประมวลผลคำขอของคุณได้ กรุณาลองอีกครั้ง",
-          isBot: true,
-          timestamp: new Date(),
-        };
-        setMessages(prev => [...prev, errorMessage]);
-      }
+      const data = await response.json();
+      const botMessage: Message = {
+        id: Date.now() + 1,
+        content: data.reply || (language === "en"
+          ? "Sorry, I couldn't process your request. Please try again."
+          : "ขออภัย ไม่สามารถประมวลผลคำขอของคุณได้ กรุณาลองอีกครั้ง"),
+        isBot: true,
+        timestamp: new Date(),
+      };
+      setMessages(prev => [...prev, botMessage]);
     } catch (error) {
       console.error("Chatbot error:", error);
       const errorMessage: Message = {
@@ -140,7 +130,7 @@ export default function Chatbot() {
                   <MessageSquare className="w-5 h-5" />
                 </div>
                 <div>
-                  <h3 className="font-heading font-semibold">onework Assistant</h3>
+                  <h3 className="font-heading font-semibold">Onework AI Assistant</h3>
                   <p className="text-xs text-white/80">
                     {language === "en" ? "Online" : "ออนไลน์"}
                   </p>
