@@ -1,10 +1,18 @@
-import type { ReactNode } from "react";
 import { motion } from "framer-motion";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useLanguage } from "@/lib/i18n";
 import { Link } from "wouter";
-import { Droplets, Layers } from "lucide-react";
+
+import shampooImg from "@assets/stock_images/hotel_shampoo_bottle_3bb33856.jpg";
+import conditionerImg from "@assets/stock_images/hotel_shampoo_bottle_f36dc06f.jpg";
+import showerGelImg from "@assets/stock_images/hotel_shower_gel_bod_6d9da0ca.jpg";
+import lotionImg from "@assets/stock_images/hotel_shampoo_bottle_a7a53e9b.jpg";
+
+import wallDispenser1 from "@assets/stock_images/wall_mounted_soap_di_f8b9a4d2.jpg";
+import wallDispenser2 from "@assets/stock_images/wall_mounted_soap_di_36077b3d.jpg";
+import wallDispenser3 from "@assets/stock_images/wall_mounted_soap_di_3219a3ac.jpg";
+import wallDispenser4 from "@assets/stock_images/wall_mounted_soap_di_635f06cb.jpg";
 
 interface BulkProduct {
   id: number;
@@ -12,9 +20,7 @@ interface BulkProduct {
   nameTh: string;
   descEn: string;
   descTh: string;
-  icon: ReactNode;
-  color: string;
-  bgColor: string;
+  image: string;
 }
 
 const gallonProducts: BulkProduct[] = [
@@ -24,9 +30,7 @@ const gallonProducts: BulkProduct[] = [
     nameTh: "แชมพูแกลลอน",
     descEn: "5L Professional Size",
     descTh: "ขนาด 5 ลิตร",
-    icon: <Droplets className="w-8 h-8" />,
-    color: "text-blue-600",
-    bgColor: "bg-blue-50",
+    image: shampooImg,
   },
   {
     id: 2,
@@ -34,9 +38,7 @@ const gallonProducts: BulkProduct[] = [
     nameTh: "ครีมนวดแกลลอน",
     descEn: "5L Professional Size",
     descTh: "ขนาด 5 ลิตร",
-    icon: <Droplets className="w-8 h-8" />,
-    color: "text-purple-600",
-    bgColor: "bg-purple-50",
+    image: conditionerImg,
   },
   {
     id: 3,
@@ -44,9 +46,7 @@ const gallonProducts: BulkProduct[] = [
     nameTh: "เจลอาบน้ำแกลลอน",
     descEn: "5L Professional Size",
     descTh: "ขนาด 5 ลิตร",
-    icon: <Droplets className="w-8 h-8" />,
-    color: "text-teal-600",
-    bgColor: "bg-teal-50",
+    image: showerGelImg,
   },
   {
     id: 4,
@@ -54,9 +54,7 @@ const gallonProducts: BulkProduct[] = [
     nameTh: "โลชั่นแกลลอน",
     descEn: "5L Professional Size",
     descTh: "ขนาด 5 ลิตร",
-    icon: <Droplets className="w-8 h-8" />,
-    color: "text-rose-600",
-    bgColor: "bg-rose-50",
+    image: lotionImg,
   },
 ];
 
@@ -67,9 +65,7 @@ const wallProducts: BulkProduct[] = [
     nameTh: "เครื่องจ่ายแชมพู",
     descEn: "300ml Wall Mount",
     descTh: "ติดผนัง 300 มล.",
-    icon: <Layers className="w-8 h-8" />,
-    color: "text-slate-600",
-    bgColor: "bg-slate-50",
+    image: wallDispenser1,
   },
   {
     id: 2,
@@ -77,9 +73,7 @@ const wallProducts: BulkProduct[] = [
     nameTh: "เครื่องจ่ายครีมนวด",
     descEn: "300ml Wall Mount",
     descTh: "ติดผนัง 300 มล.",
-    icon: <Layers className="w-8 h-8" />,
-    color: "text-slate-600",
-    bgColor: "bg-slate-50",
+    image: wallDispenser2,
   },
   {
     id: 3,
@@ -87,9 +81,7 @@ const wallProducts: BulkProduct[] = [
     nameTh: "เครื่องจ่ายเจลอาบน้ำ",
     descEn: "300ml Wall Mount",
     descTh: "ติดผนัง 300 มล.",
-    icon: <Layers className="w-8 h-8" />,
-    color: "text-slate-600",
-    bgColor: "bg-slate-50",
+    image: wallDispenser3,
   },
   {
     id: 4,
@@ -97,9 +89,7 @@ const wallProducts: BulkProduct[] = [
     nameTh: "เครื่องจ่ายโลชั่น",
     descEn: "300ml Wall Mount",
     descTh: "ติดผนัง 300 มล.",
-    icon: <Layers className="w-8 h-8" />,
-    color: "text-slate-600",
-    bgColor: "bg-slate-50",
+    image: wallDispenser4,
   },
 ];
 
@@ -145,10 +135,14 @@ export function GallonTypeSection() {
               transition={{ delay: index * 0.1 }}
             >
               <Card className="border-none shadow-sm hover:shadow-xl transition-all duration-300 group cursor-pointer h-full bg-white overflow-hidden" data-testid={`gallon-product-${product.id}`}>
-                <CardContent className="p-6 text-center">
-                  <div className={`w-20 h-20 mx-auto ${product.bgColor} rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300`}>
-                    <div className={product.color}>{product.icon}</div>
-                  </div>
+                <div className="aspect-square overflow-hidden bg-gray-50">
+                  <img 
+                    src={product.image} 
+                    alt={language === "en" ? product.nameEn : product.nameTh}
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                  />
+                </div>
+                <CardContent className="p-4 text-center">
                   <h3 className="text-lg font-semibold text-primary mb-1">
                     {language === "en" ? product.nameEn : product.nameTh}
                   </h3>
@@ -255,11 +249,15 @@ export function WallTypeSection() {
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1 }}
               >
-                <Card className="border-none shadow-sm hover:shadow-lg transition-all duration-300 group cursor-pointer h-full bg-white" data-testid={`wall-product-${product.id}`}>
-                  <CardContent className="p-5 text-center">
-                    <div className={`w-14 h-14 mx-auto ${product.bgColor} rounded-xl flex items-center justify-center mb-3 group-hover:scale-110 transition-transform duration-300`}>
-                      <div className={product.color}>{product.icon}</div>
-                    </div>
+                <Card className="border-none shadow-sm hover:shadow-lg transition-all duration-300 group cursor-pointer h-full bg-white overflow-hidden" data-testid={`wall-product-${product.id}`}>
+                  <div className="aspect-square overflow-hidden bg-gray-50">
+                    <img 
+                      src={product.image} 
+                      alt={language === "en" ? product.nameEn : product.nameTh}
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                    />
+                  </div>
+                  <CardContent className="p-4 text-center">
                     <h3 className="text-sm font-semibold text-primary mb-1">
                       {language === "en" ? product.nameEn : product.nameTh}
                     </h3>
