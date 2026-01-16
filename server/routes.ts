@@ -1,6 +1,7 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
+import { pool } from "./db";
 import { requireAuth, hashPassword } from "./auth";
 import passport from "passport";
 import { insertProductSchema, insertSettingSchema, insertUserSchema, insertCategorySchema, insertChatbotSettingsSchema, insertChatbotTrainingDataSchema } from "@shared/schema";
@@ -43,8 +44,8 @@ export async function registerRoutes(
   // Health check endpoint for container orchestration
   app.get("/api/health", async (req, res) => {
     try {
-      // Check database connection
-      await storage.getAllProducts();
+      // Just check database connection (not query tables)
+      await pool.query("SELECT 1");
       res.status(200).json({ status: "healthy", timestamp: new Date().toISOString() });
     } catch (error) {
       res.status(503).json({ status: "unhealthy", error: "Database connection failed" });
