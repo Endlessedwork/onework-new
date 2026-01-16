@@ -37,6 +37,11 @@ declare global {
 }
 
 export function setupAuth(app: Express) {
+  // Trust proxy for secure cookies behind reverse proxy (Easypanel/Cloudflare)
+  if (process.env.NODE_ENV === "production") {
+    app.set("trust proxy", 1);
+  }
+
   const sessionSettings: session.SessionOptions = {
     secret: process.env.SESSION_SECRET || "onework-secret-key-change-in-production",
     resave: false,
@@ -44,6 +49,7 @@ export function setupAuth(app: Express) {
     cookie: {
       maxAge: 24 * 60 * 60 * 1000, // 24 hours
       secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
     },
     store: new MemoryStore({
       checkPeriod: 86400000, // prune expired entries every 24h
