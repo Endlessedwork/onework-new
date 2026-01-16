@@ -4,11 +4,12 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { useLanguage } from "@/lib/i18n";
 import { useQuery } from "@tanstack/react-query";
 import type { Product } from "@shared/schema";
 import { useState, useMemo } from "react";
-import { ArrowLeft, ChevronRight } from "lucide-react";
+import { ArrowLeft, ChevronRight, X, Package, Sparkles, Leaf, Tag } from "lucide-react";
 
 import imgBeChic from "@assets/generated_images/be_chic_collection_amenities.png";
 import imgBliss from "@assets/generated_images/bliss_collection_amenities.png";
@@ -168,6 +169,7 @@ export default function Collections() {
   const { t, language } = useLanguage();
   const [selectedSeries, setSelectedSeries] = useState<string | null>(null);
   const [selectedCollection, setSelectedCollection] = useState<string | null>(null);
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
 
   const { data: products = [], isLoading } = useQuery<Product[]>({
     queryKey: ["/api/products"],
@@ -394,14 +396,21 @@ export default function Collections() {
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: index * 0.05 }}
+                onClick={() => setSelectedProduct(product)}
+                className="cursor-pointer"
               >
-                <Card className="border-none shadow-sm hover:shadow-lg transition-all duration-300 group h-full overflow-hidden">
+                <Card className="border-none shadow-sm hover:shadow-lg transition-all duration-300 group h-full overflow-hidden hover:ring-2 hover:ring-primary/30">
                   <div className="aspect-square relative overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100">
                     <img
                       src={productImage}
                       alt={productName}
                       className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                     />
+                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors flex items-center justify-center">
+                      <div className="bg-white/90 backdrop-blur-sm rounded-full p-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <Package className="w-5 h-5 text-primary" />
+                      </div>
+                    </div>
                   </div>
                   <CardContent className="p-3" data-testid={`product-${product.id}`}>
                     <h4 className="text-sm font-heading font-semibold text-foreground mb-1 group-hover:text-primary transition-colors line-clamp-2">
@@ -483,6 +492,99 @@ export default function Collections() {
         </section>
       </main>
       <Footer />
+
+      <Dialog open={!!selectedProduct} onOpenChange={(open) => !open && setSelectedProduct(null)}>
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto p-0">
+          {selectedProduct && (() => {
+            const productName = language === 'th' && selectedProduct.nameTh
+              ? selectedProduct.nameTh
+              : selectedProduct.nameEn || selectedProduct.name;
+            const productDesc = language === 'th' && selectedProduct.descriptionTh
+              ? selectedProduct.descriptionTh
+              : selectedProduct.descriptionEn || selectedProduct.description;
+            const productImage = selectedProduct.imageUrl || collectionImages[selectedProduct.collection] || defaultImage;
+            const collectionName = language === 'th' && selectedProduct.collectionTh
+              ? selectedProduct.collectionTh
+              : selectedProduct.collectionEn || selectedProduct.collection;
+            const seriesName = selectedProduct.category || '';
+            const seriesData = seriesName ? seriesInfo[seriesName] : null;
+
+            return (
+              <div>
+                <div className="relative aspect-[16/10] overflow-hidden bg-gradient-to-br from-gray-100 to-gray-50">
+                  <img
+                    src={productImage}
+                    alt={productName}
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute top-4 left-4 flex gap-2">
+                    {seriesData && (
+                      <Badge className={`${seriesData.color} text-white border-none`}>
+                        {language === 'th' ? seriesData.nameTh : seriesData.nameEn}
+                      </Badge>
+                    )}
+                  </div>
+                </div>
+                
+                <div className="p-6 space-y-6">
+                  <div>
+                    <h2 className="text-2xl md:text-3xl font-heading font-bold text-primary mb-2">
+                      {productName}
+                    </h2>
+                    <p className="text-muted-foreground flex items-center gap-2">
+                      <Tag className="w-4 h-4" />
+                      {collectionName}
+                    </p>
+                  </div>
+
+                  {productDesc && (
+                    <div className="bg-gray-50 rounded-xl p-4">
+                      <h3 className="font-heading font-semibold text-foreground mb-2 flex items-center gap-2">
+                        <Sparkles className="w-4 h-4 text-primary" />
+                        {language === 'th' ? 'รายละเอียดสินค้า' : 'Product Details'}
+                      </h3>
+                      <p className="text-muted-foreground">{productDesc}</p>
+                    </div>
+                  )}
+
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="bg-primary/5 rounded-xl p-4 text-center">
+                      <Package className="w-8 h-8 text-primary mx-auto mb-2" />
+                      <p className="text-sm font-medium text-primary">
+                        {language === 'th' ? 'คุณภาพพรีเมียม' : 'Premium Quality'}
+                      </p>
+                    </div>
+                    <div className="bg-green-50 rounded-xl p-4 text-center">
+                      <Leaf className="w-8 h-8 text-green-600 mx-auto mb-2" />
+                      <p className="text-sm font-medium text-green-700">
+                        {language === 'th' ? 'ผ่านมาตรฐาน อย.' : 'FDA Approved'}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex gap-3">
+                    <a
+                      href="/contact"
+                      className="flex-1 bg-primary text-white px-6 py-3 rounded-full font-medium hover:bg-primary/90 transition-colors text-center"
+                      data-testid="btn-product-inquiry"
+                    >
+                      {language === 'th' ? 'สอบถามราคา' : 'Request Quote'}
+                    </a>
+                    <Button
+                      variant="outline"
+                      onClick={() => setSelectedProduct(null)}
+                      className="px-6 rounded-full"
+                      data-testid="btn-close-product"
+                    >
+                      {language === 'th' ? 'ปิด' : 'Close'}
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            );
+          })()}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
