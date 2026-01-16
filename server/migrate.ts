@@ -4,6 +4,23 @@ export async function runChatMigration() {
   try {
     console.log("Running chat tables migration...");
 
+    // Check if conversations table has the correct schema
+    const columnsCheck = await pool.query(`
+      SELECT column_name FROM information_schema.columns
+      WHERE table_name = 'conversations'
+    `);
+    const columns = columnsCheck.rows.map(r => r.column_name);
+
+    // If table exists but doesn't have session_id, drop and recreate
+    if (columns.length > 0 && !columns.includes("session_id")) {
+      console.log("Old conversations table detected, dropping old chat tables...");
+      await pool.query(`DROP TABLE IF EXISTS messages CASCADE`);
+      await pool.query(`DROP TABLE IF EXISTS conversations CASCADE`);
+      await pool.query(`DROP TABLE IF EXISTS line_settings CASCADE`);
+      await pool.query(`DROP TABLE IF EXISTS chat_quick_responses CASCADE`);
+      console.log("Old tables dropped, creating new schema...");
+    }
+
     // Create conversations table
     await pool.query(`
       CREATE TABLE IF NOT EXISTS conversations (
