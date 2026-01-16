@@ -49,8 +49,11 @@ async function seedProduction() {
   // Seed settings
   if (seedData.settings.length > 0) {
     for (const setting of seedData.settings) {
-      const { id, ...settingData } = setting;
-      await db.insert(schema.settings).values(settingData).onConflictDoNothing();
+      const { id, updatedAt, ...settingData } = setting;
+      await db.insert(schema.settings).values({
+        ...settingData,
+        updatedAt: updatedAt ? new Date(updatedAt) : new Date(),
+      }).onConflictDoNothing();
     }
     console.log(`Seeded ${seedData.settings.length} settings`);
   }
@@ -58,8 +61,11 @@ async function seedProduction() {
   // Seed chatbot settings
   if (seedData.chatbotSettings.length > 0) {
     for (const cs of seedData.chatbotSettings) {
-      const { id, ...csData } = cs;
-      await db.insert(schema.chatbotSettings).values(csData).onConflictDoNothing();
+      const { id, updatedAt, ...csData } = cs;
+      await db.insert(schema.chatbotSettings).values({
+        ...csData,
+        updatedAt: updatedAt ? new Date(updatedAt) : new Date(),
+      }).onConflictDoNothing();
     }
     console.log(`Seeded ${seedData.chatbotSettings.length} chatbot settings`);
   }
