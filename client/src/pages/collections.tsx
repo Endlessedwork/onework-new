@@ -435,26 +435,20 @@ export default function Collections() {
     <div className="min-h-screen bg-background text-foreground font-sans">
       <Navbar />
       <main className="pt-24">
-        <section className="bg-gradient-to-b from-primary/10 to-background py-16">
+        <section className={`bg-gradient-to-b from-primary/10 to-background ${selectedSeries ? 'py-4' : 'py-16'}`}>
           <div className="container mx-auto px-4">
             {(selectedSeries || selectedCollection) && (
-              <motion.div
-                initial={{ opacity: 0, x: -10 }}
-                animate={{ opacity: 1, x: 0 }}
-                className="mb-6"
+              <Button
+                variant="ghost"
+                onClick={handleBack}
+                className="gap-2 font-heading hover:bg-primary/10"
+                data-testid="back-button"
               >
-                <Button
-                  variant="ghost"
-                  onClick={handleBack}
-                  className="gap-2 font-heading hover:bg-primary/10"
-                  data-testid="back-button"
-                >
-                  <ArrowLeft className="w-4 h-4" />
-                  {selectedCollection
-                    ? (language === 'th' ? 'กลับไปคอลเลคชั่น' : 'Back to Collections')
-                    : (language === 'th' ? 'กลับไปซีรีส์' : 'Back to Series')}
-                </Button>
-              </motion.div>
+                <ArrowLeft className="w-4 h-4" />
+                {selectedCollection
+                  ? (language === 'th' ? 'กลับไปคอลเลคชั่น' : 'Back to Collections')
+                  : (language === 'th' ? 'กลับไปซีรีส์' : 'Back to Series')}
+              </Button>
             )}
 
             {!selectedSeries && (
