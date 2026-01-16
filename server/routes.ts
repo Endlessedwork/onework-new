@@ -68,9 +68,8 @@ export async function registerRoutes(
       res.status(200).json({
         status: "healthy",
         timestamp: new Date().toISOString(),
-        version: "2.0.1-debug",
-        chatTablesExist,
-        conversationColumns
+        version: "2.1.0-chat",
+        chatTablesExist
       });
     } catch (error) {
       res.status(503).json({ status: "unhealthy", error: "Database connection failed" });
