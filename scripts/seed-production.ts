@@ -1,4 +1,5 @@
 import { drizzle } from "drizzle-orm/node-postgres";
+import { eq } from "drizzle-orm";
 import pg from "pg";
 import * as schema from "../shared/schema";
 import * as fs from "fs";
@@ -25,7 +26,6 @@ async function seedProduction() {
 
   // Check seed marker - use a specific setting key to track if properly seeded
   // Version 2: force re-seed to fix password hash issue
-  const { eq } = require("drizzle-orm");
   const seedMarker = await db.select().from(schema.settings).where(
     eq(schema.settings.key, "_seed_complete_v2")
   );
