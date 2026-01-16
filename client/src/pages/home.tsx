@@ -4,6 +4,7 @@ import { TrustSection } from "@/components/home/TrustSection";
 import { Services } from "@/components/home/Services";
 import { ProductCollection } from "@/components/home/ProductCollection";
 import { NewArrivals } from "@/components/home/NewArrivals";
+import { GallonTypeSection, WallTypeSection } from "@/components/home/BulkProducts";
 import { Footer } from "@/components/layout/Footer";
 import { useLanguage } from "@/lib/i18n";
 import { Link } from "wouter";
@@ -19,6 +20,8 @@ export default function Home() {
         <TrustSection />
         <NewArrivals />
         <ProductCollection />
+        <GallonTypeSection />
+        <WallTypeSection />
         <Services />
         <section className="py-24 bg-accent/20">
           <div className="container mx-auto px-4 text-center">
