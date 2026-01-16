@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useLocation, Link } from "wouter";
 import { Button } from "@/components/ui/button";
-import { LogOut, Plus, Edit, Trash2, ArrowLeft, Upload, Image } from "lucide-react";
+import { LogOut, Plus, Edit, Trash2, ArrowLeft, Image } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
@@ -172,28 +172,10 @@ export default function AdminProducts() {
     setLocation("/admin/login");
   };
 
-  const handleGetUploadParameters = async () => {
-    const response = await fetch("/api/admin/upload", {
-      method: "POST",
-      credentials: "include",
-    });
-    if (!response.ok) throw new Error("Failed to get upload URL");
-    const data = await response.json();
-    return {
-      method: "PUT" as const,
-      url: data.uploadURL,
-    };
-  };
-
-  const handleUploadComplete = (result: { successful: Array<{ uploadURL?: string }> }) => {
-    if (result.successful && result.successful.length > 0) {
-      const uploadURL = result.successful[0].uploadURL;
-      if (uploadURL) {
-        const url = new URL(uploadURL);
-        const objectPath = `/objects${url.pathname.split("/.private")[1] || url.pathname}`;
-        setFormData({ ...formData, imageUrl: objectPath });
-        toast.success("Image uploaded successfully!");
-      }
+  const handleUploadComplete = (url: string) => {
+    setFormData({ ...formData, imageUrl: url });
+    if (url) {
+      toast.success("Image uploaded successfully!");
     }
   };
 
@@ -345,32 +327,11 @@ export default function AdminProducts() {
 
                 <div className="space-y-2">
                   <Label>Product Image</Label>
-                  <div className="flex items-center gap-4">
-                    <ObjectUploader
-                      maxNumberOfFiles={1}
-                      maxFileSize={10485760}
-                      onGetUploadParameters={handleGetUploadParameters}
-                      onComplete={handleUploadComplete}
-                    >
-                      <Upload className="w-4 h-4 mr-2" />
-                      Upload Image
-                    </ObjectUploader>
-                    {formData.imageUrl && (
-                      <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                        <Image className="w-4 h-4" />
-                        <span className="truncate max-w-[200px]">{formData.imageUrl}</span>
-                      </div>
-                    )}
-                  </div>
-                  {formData.imageUrl && formData.imageUrl.startsWith("/objects/") && (
-                    <div className="mt-2">
-                      <img 
-                        src={formData.imageUrl} 
-                        alt="Preview" 
-                        className="w-32 h-32 object-cover rounded-lg border"
-                      />
-                    </div>
-                  )}
+                  <ObjectUploader
+                    onUploadComplete={handleUploadComplete}
+                    currentImage={formData.imageUrl || undefined}
+                    className="max-w-md"
+                  />
                 </div>
 
                 <div className="flex items-center space-x-2">
