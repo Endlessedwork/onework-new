@@ -1,28 +1,28 @@
 import pg from "pg";
-import fs from "fs";
-import path from "path";
-import { fileURLToPath } from "url";
+import * as fs from "fs";
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const { Pool } = pg;
 
 async function runMigration() {
   if (!process.env.DATABASE_URL) {
-    throw new Error("DATABASE_URL must be set");
+    console.error("DATABASE_URL is required");
+    process.exit(1);
   }
 
-  const pool = new pg.Pool({ connectionString: process.env.DATABASE_URL });
-
-  const migrationPath = path.join(__dirname, "../migrations/0001_chat_system.sql");
-  const sql = fs.readFileSync(migrationPath, "utf-8");
-
-  console.log("Running chat system migration...");
+  const pool = new Pool({ connectionString: process.env.DATABASE_URL });
 
   try {
+    // Read and execute SQL migration
+    const sql = fs.readFileSync("scripts/migrate-chat.sql", "utf-8");
     await pool.query(sql);
-    console.log("✅ Migration completed successfully!");
-  } catch (error) {
-    console.error("❌ Migration failed:", error);
-    throw error;
+    console.log("Chat tables migration completed successfully");
+  } catch (error: any) {
+    // Ignore "already exists" errors
+    if (error.code === "42P07") {
+      console.log("Tables already exist, skipping migration");
+    } else {
+      console.error("Migration error:", error.message);
+    }
   } finally {
     await pool.end();
   }
