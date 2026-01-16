@@ -54,11 +54,23 @@ export async function registerRoutes(
         SELECT EXISTS (SELECT FROM information_schema.tables WHERE table_name = 'conversations')
       `);
       const chatTablesExist = tablesCheck.rows[0]?.exists || false;
+
+      // Get column names if table exists
+      let conversationColumns: string[] = [];
+      if (chatTablesExist) {
+        const columnsResult = await pool.query(`
+          SELECT column_name FROM information_schema.columns
+          WHERE table_name = 'conversations' ORDER BY ordinal_position
+        `);
+        conversationColumns = columnsResult.rows.map(r => r.column_name);
+      }
+
       res.status(200).json({
         status: "healthy",
         timestamp: new Date().toISOString(),
-        version: "2.0.0-chat",
-        chatTablesExist
+        version: "2.0.1-debug",
+        chatTablesExist,
+        conversationColumns
       });
     } catch (error) {
       res.status(503).json({ status: "unhealthy", error: "Database connection failed" });
