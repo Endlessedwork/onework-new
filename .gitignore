@@ -49,9 +49,9 @@ db_backup_*.csv
 # Local development
 .local/
 
-# Replit specific (remove if not using Replit)
-.replit
-replit.md
+# Uploads (keep directory, ignore files)
+uploads/*
+!uploads/.gitkeep
 
 # Test coverage
 coverage/
