@@ -220,10 +220,10 @@ export default function Customers() {
                 : "พร้อมยกระดับประสบการณ์แขกของคุณด้วยอุปกรณ์พรีเมียม? ติดต่อเราวันนี้เพื่อรับคำปรึกษาและใบเสนอราคา"}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <a href="/contact" className="bg-primary text-white px-8 py-4 rounded-full font-medium hover:bg-primary/90 transition-colors shadow-lg">
+              <a href="/contact" className="bg-primary text-white px-8 py-4 rounded-full font-medium hover:bg-primary/90 transition-colors shadow-lg" data-testid="btn-contact-us">
                 {language === "en" ? "Contact Us" : "ติดต่อเรา"}
               </a>
-              <a href="/collections" className="bg-white text-primary px-8 py-4 rounded-full font-medium hover:bg-gray-50 transition-colors shadow border border-gray-200">
+              <a href="/collections" className="bg-white text-primary px-8 py-4 rounded-full font-medium hover:bg-gray-50 transition-colors shadow border border-gray-200" data-testid="btn-view-products">
                 {language === "en" ? "View Products" : "ดูสินค้า"}
               </a>
             </div>

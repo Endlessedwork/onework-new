@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import { motion } from "framer-motion";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -11,7 +12,7 @@ interface BulkProduct {
   nameTh: string;
   descEn: string;
   descTh: string;
-  icon: React.ReactNode;
+  icon: ReactNode;
   color: string;
   bgColor: string;
 }
@@ -127,6 +128,7 @@ export function GallonTypeSection() {
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               className="inline-flex items-center gap-2 border-2 border-primary text-primary px-6 py-3 rounded-full font-medium hover:bg-primary hover:text-white transition-colors"
+              data-testid="btn-view-gallons"
             >
               {language === "en" ? "View All Gallons" : "ดูสินค้าแกลลอนทั้งหมด"}
             </motion.button>
@@ -188,6 +190,7 @@ export function WallTypeSection() {
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-full font-medium hover:bg-primary/90 transition-colors shadow-lg"
+              data-testid="btn-explore-wall-type"
             >
               {language === "en" ? "Explore Wall Type" : "ดูสินค้าติดผนัง"}
             </motion.button>

@@ -37,6 +37,7 @@ import imgKidsHero from "@assets/generated_images/kids_series_hero_banner.png";
 const collectionImages: Record<string, string> = {
   "Be Chic": imgBeChic,
   "Bliss": imgBliss,
+  "Eco Black": imgBeChic,
   "Sea Breeze": imgSeaBreeze,
   "Bloom": imgBloom,
   "Flower Blossom": imgFlowerBlossom,
@@ -48,7 +49,11 @@ const collectionImages: Record<string, string> = {
   "PCR Recycling": imgPCR,
   "Care for Nature": imgCareForNature,
   "The Beyond": imgTheBeyond,
+  "Eco Chic": imgCareForNature,
+  "Soft Touch": imgTheBeyond,
   "Happy Little One": imgHappyLittleOne,
+  "Happy Dino": imgHappyLittleOne,
+  "Wall Dispenser": imgBulk,
   "Slippers": imgSlippers,
   "Bags": imgSlippers,
   "Door Hangers": imgSlippers,
@@ -77,8 +82,8 @@ const seriesInfo: Record<string, SeriesData> = {
   "Budget Series": {
     nameEn: "Budget Series",
     nameTh: "ซีรีส์งบประมาณ",
-    description: "Products for Budget Hotels with good price and smart look",
-    descriptionTh: "สินค้าสำหรับโรงแรมงบประมาณ ราคาดี ดูดี",
+    description: "Perfect for budget hotels, hostels, and guesthouses. Smart design at affordable prices without compromising quality.",
+    descriptionTh: "เหมาะสำหรับโรงแรมราคาประหยัด โฮสเทล และเกสต์เฮาส์ ดีไซน์ดูดี ราคาคุ้มค่า คุณภาพไม่ลดลง",
     color: "bg-blue-500",
     gradient: "from-blue-600 to-blue-400",
     heroImage: imgBudgetHero,
@@ -86,8 +91,8 @@ const seriesInfo: Record<string, SeriesData> = {
   "Standard Series": {
     nameEn: "Standard Series",
     nameTh: "ซีรีส์มาตรฐาน",
-    description: "Standard quality products for various hotel styles",
-    descriptionTh: "สินค้าคุณภาพมาตรฐาน เหมาะกับโรงแรมหลากหลายสไตล์",
+    description: "Ideal for 3-4 star hotels and business hotels. Premium quality with elegant scents and beautiful packaging.",
+    descriptionTh: "เหมาะสำหรับโรงแรม 3-4 ดาว และโรงแรมธุรกิจ คุณภาพพรีเมียม กลิ่นหอมหรูหรา บรรจุภัณฑ์สวยงาม",
     color: "bg-green-500",
     gradient: "from-green-600 to-green-400",
     heroImage: imgStandardHero,
@@ -95,8 +100,8 @@ const seriesInfo: Record<string, SeriesData> = {
   "Premium Series": {
     nameEn: "Premium Series",
     nameTh: "ซีรีส์พรีเมียม",
-    description: "Premium quality products with elegant design",
-    descriptionTh: "สินค้าคุณภาพพรีเมียม ดีไซน์หรูหรา",
+    description: "Designed for 4-5 star hotels and boutique resorts. Luxurious formulas with sophisticated fragrances.",
+    descriptionTh: "ออกแบบสำหรับโรงแรม 4-5 ดาว และบูติครีสอร์ท สูตรหรูหรา กลิ่นหอมระดับพรีเมียม",
     color: "bg-purple-500",
     gradient: "from-purple-600 to-purple-400",
     heroImage: imgPremiumHero,
@@ -104,8 +109,8 @@ const seriesInfo: Record<string, SeriesData> = {
   "Luxury Series": {
     nameEn: "Luxury Series",
     nameTh: "ซีรีส์ลักซูรี่",
-    description: "Luxury products for upscale hotels and resorts",
-    descriptionTh: "สินค้าหรูหราสำหรับโรงแรมและรีสอร์ทระดับสูง",
+    description: "Exclusively for 5-star luxury hotels, high-end resorts, and wellness spas. The finest ingredients and spa-grade formulas.",
+    descriptionTh: "สำหรับโรงแรมหรู 5 ดาว รีสอร์ทระดับสูง และสปาเวลเนส ส่วนผสมคุณภาพสูงสุด สูตรระดับสปา",
     color: "bg-amber-500",
     gradient: "from-amber-600 to-amber-400",
     heroImage: imgLuxuryHero,
@@ -113,8 +118,8 @@ const seriesInfo: Record<string, SeriesData> = {
   "Earth Series": {
     nameEn: "Earth Series",
     nameTh: "ซีรีส์รักษ์โลก",
-    description: "Eco-friendly and environmentally conscious products",
-    descriptionTh: "สินค้าเป็นมิตรกับสิ่งแวดล้อม รักษ์โลก",
+    description: "For eco-conscious hotels and green-certified resorts. 100% biodegradable, PCR recycled packaging, and natural ingredients.",
+    descriptionTh: "สำหรับโรงแรมรักษ์โลกและรีสอร์ทที่ได้รับการรับรองมาตรฐานสิ่งแวดล้อม บรรจุภัณฑ์ย่อยสลายได้ 100% รีไซเคิล PCR ส่วนผสมจากธรรมชาติ",
     color: "bg-emerald-600",
     gradient: "from-emerald-700 to-emerald-500",
     heroImage: imgEarthHero,
@@ -122,8 +127,8 @@ const seriesInfo: Record<string, SeriesData> = {
   "Kids Series": {
     nameEn: "Kids Series",
     nameTh: "ซีรีส์สำหรับเด็ก",
-    description: "Special products designed for children",
-    descriptionTh: "สินค้าพิเศษออกแบบสำหรับเด็ก",
+    description: "Perfect for family-friendly hotels and resorts with kids' clubs. Gentle formulas, fun designs, and tear-free products.",
+    descriptionTh: "เหมาะสำหรับโรงแรมสำหรับครอบครัวและรีสอร์ทที่มีคิดส์คลับ สูตรอ่อนโยน ดีไซน์สนุกสนาน ไม่แสบตา",
     color: "bg-pink-500",
     gradient: "from-pink-600 to-pink-400",
     heroImage: imgKidsHero,
@@ -131,24 +136,33 @@ const seriesInfo: Record<string, SeriesData> = {
   "Bulk Products": {
     nameEn: "Bulk Products",
     nameTh: "สินค้าขนาดใหญ่",
-    description: "Large size refill products 4L",
-    descriptionTh: "สินค้าขนาดใหญ่ 4 ลิตร สำหรับเติม",
+    description: "Gallon-sized products for high-volume hotels. Cost-effective refills for wall dispensers and large bathrooms.",
+    descriptionTh: "สินค้าขนาดแกลลอนสำหรับโรงแรมที่มีการใช้งานสูง ประหยัดต้นทุนสำหรับเติมเครื่องจ่ายติดผนัง",
     color: "bg-orange-500",
     gradient: "from-orange-600 to-orange-400",
+    heroImage: imgBulk,
+  },
+  "Wall Type": {
+    nameEn: "Wall Type",
+    nameTh: "สินค้าติดผนัง",
+    description: "Modern wall-mounted dispensers for eco-conscious hotels. Reduce plastic waste and create a sleek bathroom experience.",
+    descriptionTh: "เครื่องจ่ายติดผนังทันสมัยสำหรับโรงแรมรักษ์โลก ลดขยะพลาสติก สร้างประสบการณ์ห้องน้ำที่ทันสมัย",
+    color: "bg-slate-600",
+    gradient: "from-slate-700 to-slate-500",
     heroImage: imgBulk,
   },
   "Accessories": {
     nameEn: "Accessories",
     nameTh: "อุปกรณ์เสริม",
-    description: "Slippers, bags, door hangers and other accessories",
-    descriptionTh: "รองเท้าสลิปเปอร์ ถุง ป้ายคล้องประตู และอุปกรณ์อื่นๆ",
+    description: "Complete your hotel amenity set with slippers, bags, door hangers, and more. Available in various styles and qualities.",
+    descriptionTh: "เติมเต็มชุดอุปกรณ์โรงแรมด้วยรองเท้าแตะ ถุง ป้ายคล้องประตู และอื่นๆ มีหลายสไตล์และคุณภาพ",
     color: "bg-slate-500",
     gradient: "from-slate-600 to-slate-400",
     heroImage: imgSlippers,
   },
 };
 
-const seriesOrder = ["Budget Series", "Standard Series", "Premium Series", "Luxury Series", "Earth Series", "Kids Series", "Bulk Products", "Accessories"];
+const seriesOrder = ["Budget Series", "Standard Series", "Premium Series", "Luxury Series", "Earth Series", "Kids Series", "Wall Type", "Bulk Products", "Accessories"];
 
 export default function Collections() {
   const { t, language } = useLanguage();
