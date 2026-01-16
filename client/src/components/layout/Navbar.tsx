@@ -82,20 +82,7 @@ export function Navbar() {
             {language.toUpperCase()}
           </button>
 
-          <Link href="/contact">
-            <Button 
-              variant="outline" 
-              className={cn(
-                "rounded-full px-6 transition-all",
-                isScrolled || !isHome
-                  ? "border-primary/20 hover:bg-primary hover:text-white" 
-                  : "border-white/40 text-white hover:bg-white hover:text-primary"
-              )}
-            >
-              {t('nav.quote')}
-            </Button>
-          </Link>
-        </div>
+          </div>
 
         {/* Mobile Toggle */}
         <div className="flex items-center gap-4 md:hidden">
@@ -134,12 +121,7 @@ export function Navbar() {
               </a>
             </Link>
           ))}
-          <Link href="/contact">
-            <Button className="w-full rounded-full bg-primary text-white">
-              {t('nav.quote')}
-            </Button>
-          </Link>
-        </div>
+          </div>
       )}
     </nav>
   );
