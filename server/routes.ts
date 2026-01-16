@@ -5,8 +5,36 @@ import { requireAuth, hashPassword } from "./auth";
 import passport from "passport";
 import { insertProductSchema, insertSettingSchema, insertUserSchema, insertCategorySchema, insertChatbotSettingsSchema, insertChatbotTrainingDataSchema } from "@shared/schema";
 import { fromZodError } from "zod-validation-error";
-import { ObjectStorageService, ObjectNotFoundError } from "./objectStorage";
+import { LocalStorageService, ObjectNotFoundError } from "./localStorage";
+import multer from "multer";
+import path from "path";
 import OpenAI from "openai";
+
+// Configure multer for file uploads
+const storage_multer = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, path.resolve(process.cwd(), "uploads"));
+  },
+  filename: (req, file, cb) => {
+    const localStorageService = new LocalStorageService();
+    cb(null, localStorageService.generateFilename(file.originalname));
+  },
+});
+
+const upload = multer({
+  storage: storage_multer,
+  limits: { fileSize: 10 * 1024 * 1024 }, // 10MB limit
+  fileFilter: (req, file, cb) => {
+    const allowedTypes = /jpeg|jpg|png|gif|webp|svg|pdf/;
+    const ext = allowedTypes.test(path.extname(file.originalname).toLowerCase());
+    const mime = allowedTypes.test(file.mimetype);
+    if (ext && mime) {
+      cb(null, true);
+    } else {
+      cb(new Error("Only image files are allowed"));
+    }
+  },
+});
 
 export async function registerRoutes(
   httpServer: Server,
@@ -283,27 +311,29 @@ export async function registerRoutes(
     }
   });
 
-  // Object Storage routes for image upload
-  // Reference: blueprint:javascript_object_storage
-  app.post("/api/admin/upload", requireAuth, async (_req, res) => {
+  // Local Storage routes for image upload
+  app.post("/api/admin/upload", requireAuth, upload.single("file"), async (req, res) => {
     try {
-      const objectStorageService = new ObjectStorageService();
-      const uploadURL = await objectStorageService.getObjectEntityUploadURL();
-      res.json({ uploadURL });
+      if (!req.file) {
+        return res.status(400).send({ error: "No file uploaded" });
+      }
+
+      const localStorageService = new LocalStorageService();
+      const url = localStorageService.getPublicUrl(req.file.filename);
+      res.json({ url, filename: req.file.filename });
     } catch (error: any) {
-      console.error("Upload URL error:", error);
+      console.error("Upload error:", error);
       res.status(500).send({ error: error.message });
     }
   });
 
-  // Serve uploaded objects
-  app.get("/objects/:objectPath(*)", async (req, res) => {
-    const objectStorageService = new ObjectStorageService();
+  // Serve uploaded files
+  app.get("/uploads/:filename", async (req, res) => {
+    const localStorageService = new LocalStorageService();
     try {
-      const objectFile = await objectStorageService.getObjectEntityFile(req.path);
-      objectStorageService.downloadObject(objectFile, res);
+      await localStorageService.downloadFile(req.params.filename, res);
     } catch (error) {
-      console.error("Error serving object:", error);
+      console.error("Error serving file:", error);
       if (error instanceof ObjectNotFoundError) {
         return res.sendStatus(404);
       }
