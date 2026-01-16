@@ -15,27 +15,24 @@ async function seedProduction() {
   const pool = new Pool({ connectionString: process.env.DATABASE_URL });
   const db = drizzle(pool, { schema });
 
-  // Check if all data exists (products, settings, users)
-  const existingProducts = await db.select().from(schema.products);
-  const existingSettings = await db.select().from(schema.settings);
+  // Check if admin user exists (most critical piece)
   const existingUsers = await db.select().from(schema.users);
 
-  if (existingProducts.length > 0 && existingSettings.length > 0 && existingUsers.length > 0) {
-    console.log("Database already has complete data, skipping seed");
+  if (existingUsers.length > 0) {
+    console.log("Database already has admin user, skipping full seed");
     await pool.end();
     return;
   }
 
   console.log("Seeding production database...");
 
-  // Clear existing incomplete data
+  // Clear ALL existing data for fresh start
   console.log("Clearing existing data...");
   await db.delete(schema.chatbotTrainingData);
   await db.delete(schema.chatbotSettings);
   await db.delete(schema.settings);
   await db.delete(schema.products);
   await db.delete(schema.categories);
-  await db.delete(schema.users);
 
   // Load seed data
   const seedData = JSON.parse(fs.readFileSync("scripts/seed-data.json", "utf-8"));
