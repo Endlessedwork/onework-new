@@ -434,24 +434,24 @@ export default function Collections() {
   return (
     <div className="min-h-screen bg-background text-foreground font-sans">
       <Navbar />
-      <main className="pt-24">
-        <section className={`bg-gradient-to-b from-primary/10 to-background ${selectedSeries ? 'py-4' : 'py-16'}`}>
-          <div className="container mx-auto px-4">
-            {(selectedSeries || selectedCollection) && (
-              <Button
-                variant="ghost"
-                onClick={handleBack}
-                className="gap-2 font-heading hover:bg-primary/10"
-                data-testid="back-button"
-              >
-                <ArrowLeft className="w-4 h-4" />
-                {selectedCollection
-                  ? (language === 'th' ? 'กลับไปคอลเลคชั่น' : 'Back to Collections')
-                  : (language === 'th' ? 'กลับไปซีรีส์' : 'Back to Series')}
-              </Button>
-            )}
-
-            {!selectedSeries && (
+      <main className="pt-20">
+        {(selectedSeries || selectedCollection) ? (
+          <div className="container mx-auto px-4 py-2">
+            <Button
+              variant="ghost"
+              onClick={handleBack}
+              className="gap-2 font-heading hover:bg-primary/10 -ml-2"
+              data-testid="back-button"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              {selectedCollection
+                ? (language === 'th' ? 'กลับไปคอลเลคชั่น' : 'Back to Collections')
+                : (language === 'th' ? 'กลับไปซีรีส์' : 'Back to Series')}
+            </Button>
+          </div>
+        ) : (
+          <section className="bg-gradient-to-b from-primary/10 to-background py-16">
+            <div className="container mx-auto px-4">
               <motion.div
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -466,11 +466,11 @@ export default function Collections() {
                     : 'Select a series to explore collections and products'}
                 </p>
               </motion.div>
-            )}
-          </div>
-        </section>
+            </div>
+          </section>
+        )}
 
-        <section className="py-12 container mx-auto px-4">
+        <section className={`container mx-auto px-4 ${selectedSeries ? 'py-4' : 'py-12'}`}>
           {isLoading ? (
             <div className="text-center py-12">
               <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4" />
