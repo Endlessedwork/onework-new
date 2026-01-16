@@ -2,9 +2,17 @@ import { drizzle } from "drizzle-orm/node-postgres";
 import pg from "pg";
 import * as schema from "../shared/schema";
 import * as fs from "fs";
-import bcrypt from "bcrypt";
+import { scrypt, randomBytes } from "crypto";
+import { promisify } from "util";
 
 const { Pool } = pg;
+const scryptAsync = promisify(scrypt);
+
+async function hashPassword(password: string): Promise<string> {
+  const salt = randomBytes(16).toString("hex");
+  const buf = (await scryptAsync(password, salt, 64)) as Buffer;
+  return `${buf.toString("hex")}.${salt}`;
+}
 
 async function seedProduction() {
   if (!process.env.DATABASE_URL) {
@@ -88,16 +96,13 @@ async function seedProduction() {
     console.log(`Seeded ${seedData.chatbotTrainingData.length} training data`);
   }
 
-  // Create admin user if not exists
-  const existingAdmin = await db.select().from(schema.users);
-  if (existingAdmin.length === 0) {
-    const hashedPassword = await bcrypt.hash("admin123", 10);
-    await db.insert(schema.users).values({
-      username: "admin",
-      password: hashedPassword,
-    });
-    console.log("Created admin user (username: admin, password: admin123)");
-  }
+  // Create admin user
+  const hashedPassword = await hashPassword("admin123");
+  await db.insert(schema.users).values({
+    username: "admin",
+    password: hashedPassword,
+  });
+  console.log("Created admin user (username: admin, password: admin123)");
 
   console.log("Seed completed!");
   await pool.end();
