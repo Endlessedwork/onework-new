@@ -4,6 +4,8 @@ import { cn } from "@/lib/utils";
 import { Menu, X, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/lib/i18n";
+import logoLight from "@assets/logo-light_1768556174788.png";
+import logoDark from "@assets/logo-dark_1768556167534.png";
 
 export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -46,12 +48,11 @@ export function Navbar() {
       <div className="container mx-auto px-4 flex items-center justify-between">
         {/* Logo */}
         <Link href="/">
-          <a className={cn(
-            "text-2xl font-heading font-bold tracking-tight transition-colors",
-             isScrolled || !isHome ? "text-primary" : "text-primary md:text-white"
-          )}>
-            onework<span className="text-accent">.</span>
-          </a>
+          <img 
+            src={isScrolled || !isHome ? logoLight : logoDark} 
+            alt="Onework" 
+            className="h-10 md:h-12 w-auto cursor-pointer transition-opacity hover:opacity-80"
+          />
         </Link>
 
         {/* Desktop Nav */}

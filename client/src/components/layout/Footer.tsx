@@ -1,6 +1,7 @@
 import { Link } from "wouter";
 import { useLanguage } from "@/lib/i18n";
 import { Phone, Mail, MapPin, MessageCircle } from "lucide-react";
+import logoDark from "@assets/logo-dark_1768556167534.png";
 
 export function Footer() {
   const { t, language } = useLanguage();
@@ -11,9 +12,11 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-10 mb-12">
           <div className="space-y-4">
             <Link href="/">
-              <span className="text-3xl font-heading font-bold tracking-tight text-white cursor-pointer">
-                onework<span className="text-accent">.</span>
-              </span>
+              <img 
+                src={logoDark} 
+                alt="Onework" 
+                className="h-12 w-auto cursor-pointer hover:opacity-80 transition-opacity"
+              />
             </Link>
             <p className="text-white/70 leading-relaxed text-sm">
               {language === 'en' 
